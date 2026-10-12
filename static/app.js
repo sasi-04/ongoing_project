@@ -3142,11 +3142,56 @@ async function boot() {
   render();
 }
 
+const VIEW_SUBTITLES = {
+  login: "Operation: Specialist & Caregiver Authentication · Zero-Trust RBAC",
+  dashboard: "Operation: Multidisciplinary Triage & Pediatric Caseload Overview",
+  patients: "Operation: Student Registry · Longitudinal Neurodevelopmental Records",
+  analysis: "Operation: Multi-Agent Consensus · Neuro-Symbolic Diagnostic Breakdown",
+  recs: "Operation: Personalized Learning Plan · Evidence-Based Accommodations & Sign-off",
+  graph: "Operation: Live Biomedical Knowledge Graph · Interactive Entity & Protocol Pathways",
+  reports: "Operation: Clinical Documentation · Generating Section 504 & IEP Reports",
+  vitals: "Operation: Physiological Telemetry · Real-Time Sensory Regulation Biomarkers",
+  soap: "Operation: Clinical SOAP Documentation · ICD-10/CPT Automated Coding",
+  voice: "Operation: Ambient Clinical Voice Assistant · Speech-to-Text Pediatric Consultation",
+  copilot: "Operation: Clinical Copilot · Interactive Pediatric Decision Support",
+  library: "Operation: Clinical Evidence Library · Orton-Gillingham & Behavioral Protocols",
+  explain: "Operation: Neuro-Symbolic Explainability · Rule Firings & Decision Tree Traces",
+  presentation: "Operation: Product Walkthrough · Clinical Problem & Workflow Slide Deck",
+  admin: "Operation: System Governance · Model Auditing & Safety Constraints",
+  upload: "Operation: Clinical Dossier Intake · Multi-Modal Document Extraction"
+};
+
+let customSubtitleTimeout = null;
+
+window.setSubtitle = function(text, duration = 0) {
+  let el = document.getElementById("video-subtitles");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "video-subtitles";
+    el.innerHTML = '<span class="sub-dot"></span><span id="subtitle-text"></span>';
+    document.body.appendChild(el);
+  }
+  const textEl = document.getElementById("subtitle-text");
+  if (textEl) {
+    textEl.textContent = text;
+  }
+  if (customSubtitleTimeout) clearTimeout(customSubtitleTimeout);
+  if (duration > 0) {
+    customSubtitleTimeout = setTimeout(() => {
+      const defaultText = (!S.token || !S.user) ? VIEW_SUBTITLES.login : (VIEW_SUBTITLES[S.view] || VIEW_SUBTITLES.dashboard);
+      if (textEl) textEl.textContent = defaultText;
+    }, duration);
+  }
+};
+
 function render() {
   document.title = "CARE AI · Patient Clinical Intelligence";
   if (!S.token || !S.user) {
+    window.setSubtitle(VIEW_SUBTITLES.login);
     return $app.replaceChildren(loginView());
   }
+
+  window.setSubtitle(VIEW_SUBTITLES[S.view] || VIEW_SUBTITLES.dashboard);
 
   let content;
   switch (S.view) {
