@@ -75,8 +75,8 @@ Follow this sequence during your presentation to keep the spotlight on the core 
 [Parent Input & Case Profile] ──> [Multi-Agent Analysis] ──> [Clinician Joint Review & Sign-Off] ──> [Actionable Parent Summary]
 ```
 
-### Step 1: The Product Mission (`📽️ Presentation Deck`)
-- **Action:** Open `📽️ Company Presentation Deck` in the top navigation.
+### Step 1: The Product Mission (`Presentation Deck`)
+- **Action:** Open `Clinical Briefing Deck` in the top navigation.
 - **Talking Points:** Show Slides 1–3. Emphasize the pediatric neurodevelopmental mission (ASD, ADHD, dyslexia, speech disorders). Point out the comparison table illustrating why deterministic symbolic rules are essential for safety-critical special education planning.
 - **Key Message:** We are building decision support for a multidisciplinary team and family, not an autonomous replacement for clinical judgment.
 

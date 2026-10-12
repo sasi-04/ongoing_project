@@ -2259,7 +2259,7 @@ function voiceAssistantModal() {
       h("div", {
         class: "voice-orb-status",
         style: "font-size:0.84rem; font-weight:700; color:" + (S.voiceEmergency ? "#DC2626" : "var(--accent)") + "; margin-bottom:1rem;"
-      }, S.voiceEmergency ? "⚠️ EMERGENCY DETECTED — SEEK IMMEDIATE CARE" :
+      }, S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED — SEEK IMMEDIATE CARE" :
          S.voiceListening ? "Listening to your voice... Speak now" :
          S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
          (S.voiceInterim || "Tap Orb or Microphone to Speak")),
@@ -2422,7 +2422,7 @@ function voiceView() {
         h("div", {
           class: "voice-orb-status",
           style: "font-size:0.88rem; font-weight:700; color:" + (S.voiceEmergency ? "#DC2626" : "var(--accent)") + "; margin-bottom:1rem;"
-        }, S.voiceEmergency ? "⚠️ EMERGENCY DETECTED — SEEK IMMEDIATE CARE" :
+        }, S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED — SEEK IMMEDIATE CARE" :
            S.voiceListening ? "Listening to your voice... Speak now" :
            S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
            (S.voiceInterim || "Tap Orb or Microphone to Speak")),

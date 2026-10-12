@@ -819,7 +819,7 @@ def clinical_voice_command(req: VoiceCommandRequest, u=Depends(user)):
         intent = "emergency_triage"
         is_emergency = True
         reply = (
-            "⚠️ **CRITICAL MEDICAL ALERT: IMMEDIATE ATTENTION REQUIRED**\n\n"
+            "**CRITICAL CLINICAL ALERT: IMMEDIATE ATTENTION REQUIRED**\n\n"
             "Your stated symptoms (such as acute chest discomfort or shortness of breath) require immediate emergency medical evaluation.\n\n"
             "• **Immediate Action:** Stop any physical activity, sit or lie down in a safe position.\n"
             "• **Call Emergency Services:** Please dial **911** (or your local emergency medical service) immediately.\n"
@@ -873,7 +873,7 @@ def clinical_voice_command(req: VoiceCommandRequest, u=Depends(user)):
                 }.get(rf, "recorded")
 
                 reply = (
-                    f"✅ **Vitals Successfully Logged by Voice:**\n\n"
+                    f"**Telemetry Successfully Recorded:**\n\n"
                     f"• **Blood Pressure:** `{sys_val}/{dia_val} mmHg`\n"
                     f"• **Resting Pulse:** `{pulse_val} bpm`\n"
                     f"• **Risk Classification:** **{rf.upper()}** ({status_desc})\n"
@@ -901,7 +901,7 @@ def clinical_voice_command(req: VoiceCommandRequest, u=Depends(user)):
         if vlist:
             latest = vlist[0]
             reply = (
-                f"📊 **Current Telemetry Status for {sid}:**\n\n"
+                f"**Current Telemetry Status for {sid}:**\n\n"
                 f"• **Most Recent Reading:** `{latest['systolic']}/{latest['diastolic']} mmHg`\n"
                 f"• **Resting Heart Rate:** `{latest['pulse']} bpm`\n"
                 f"• **Sleep Duration:** `{latest['sleep_hours']} hours`\n"
@@ -1556,7 +1556,7 @@ def generate_dossier_html(plan: dict, audit_hash: str, pid: str = "") -> str:
 </head>
 <body>
 <div class="no-print" style="margin-bottom: 1.5rem; text-align: right;">
-  <button onclick="window.print()" style="background:#0047FF; color:#FFF; border:none; padding:0.6rem 1.4rem; border-radius:6px; font-weight:700; cursor:pointer;">🖨️ Print or Save as PDF</button>
+  <button onclick="window.print()" style="background:#1E3A8A; color:#FFF; border:none; padding:0.6rem 1.4rem; border-radius:6px; font-weight:700; cursor:pointer;">Print or Save as PDF</button>
 </div>
 
 <div class="header">
