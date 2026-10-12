@@ -778,7 +778,7 @@ function vitalsView() {
     const latest = list[0] || { systolic: 124, diastolic: 80, pulse: 70, sleep_hours: 7.8, stress_level: 1, risk_flag: "normal" };
 
     const tagClass = latest.risk_flag.includes("crisis") || latest.risk_flag.includes("stage2") ? "stage2" :
-                     (latest.risk_flag.includes("stage1") || latest.risk_flag.includes("prehypertension") ? "stage1" : "normal");
+      (latest.risk_flag.includes("stage1") || latest.risk_flag.includes("prehypertension") ? "stage1" : "normal");
     const tagLabel = latest.risk_flag.replace("_", " ").toUpperCase();
 
     // SVG Chart builder
@@ -1094,7 +1094,7 @@ function multimodalLab() {
         h("span", { class: "badge cobalt" }, "Prosody + ASR")),
       h("div", { class: "mic-viewport recording" },
         h("div", { class: "mic-wave-bars" },
-          [1,2,3,4,5,6,7,8,9,10].map(() => h("div", { class: "mic-wave-bar" }))),
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => h("div", { class: "mic-wave-bar" }))),
         h("div", { class: "small mute" }, "Acoustic Biomarker Signal Active")),
       h("label", { style: "margin-top:0.8rem;" }, "Clinical Transcript / Voice Sample Notes"),
       transcriptInput,
@@ -1846,7 +1846,7 @@ function feedbackView() {
           h("tbody", {},
             h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Literacy & Phonological Accommodations"), h("td", {}, "32"), h("td", { class: "pass" }, "96%"), h("td", { class: "pass" }, "+0.18 weight")),
             h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Sensory Quiet Room & Auditory Breaks"), h("td", {}, "28"), h("td", { class: "pass" }, "92%"), h("td", { class: "pass" }, "+0.14 weight")),
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Executive Checklists & Chunked Sprints"), h("td", {}, "41"), h("td", { class: "pass" }, "98%"), h("td", { class: "pass" }, "+0.22 weight"))))))));
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Executive Checklists & Chunked Sprints"), h("td", {}, "41"), h("td", { class: "pass" }, "98%"), h("td", { class: "pass" }, "+0.22 weight")))))));
 }
 
 // Fallback Helper for Cases
@@ -1901,11 +1901,13 @@ function adminView() {
       h("h2", {}, "Cryptographic Audit Trail Integrity"),
       h("p", { class: "mute small" }, "Tamper-evident SHA-256 hash-chain verification for HIPAA and clinical regulatory compliance:"),
       h("p", { style: "margin-top:1rem;" },
-        h("button", { class: "primary", onclick: async () => {
-          const r = await api("/audit/verify");
-          out.replaceChildren(h("p", { class: r.intact ? "pass" : "fail", style: "font-weight:700; margin-top:0.8rem;" },
-            r.intact ? "✓ Clinical audit log is intact and tamper-free." : "Tampering detected in audit chain!"));
-        } }, "Verify Audit Chain")),
+        h("button", {
+          class: "primary", onclick: async () => {
+            const r = await api("/audit/verify");
+            out.replaceChildren(h("p", { class: r.intact ? "pass" : "fail", style: "font-weight:700; margin-top:0.8rem;" },
+              r.intact ? "✓ Clinical audit log is intact and tamper-free." : "Tampering detected in audit chain!"));
+          }
+        }, "Verify Audit Chain")),
       out));
 }
 
@@ -2031,7 +2033,7 @@ const VoiceAgent = {
 
   stopListening() {
     if (this.recognition) {
-      try { this.recognition.stop(); } catch (e) {}
+      try { this.recognition.stop(); } catch (e) { }
     }
     S.voiceListening = false;
     S.voiceInterim = "";
@@ -2082,7 +2084,7 @@ const VoiceAgent = {
 
   stopSpeaking() {
     if (this.synth) {
-      try { this.synth.cancel(); } catch (e) {}
+      try { this.synth.cancel(); } catch (e) { }
     }
     S.voiceSpeaking = false;
     updateVoiceUI();
@@ -2150,8 +2152,8 @@ function updateVoiceUI() {
   const tBodies = document.querySelectorAll(".voice-transcript-body");
 
   const stateClass = S.voiceEmergency ? "emergency" :
-                     S.voiceListening ? "listening" :
-                     S.voiceSpeaking ? "speaking" : "idle";
+    S.voiceListening ? "listening" :
+      S.voiceSpeaking ? "speaking" : "idle";
 
   if (orb) {
     orb.className = "voice-orb-core " + stateClass;
@@ -2166,9 +2168,9 @@ function updateVoiceUI() {
   });
 
   const statusText = S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED" :
-                     S.voiceListening ? "Listening to your voice... Speak now" :
-                     S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
-                     (S.voiceInterim || "Tap Orb or Microphone to Speak");
+    S.voiceListening ? "Listening to your voice... Speak now" :
+      S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
+        (S.voiceInterim || "Tap Orb or Microphone to Speak");
 
   statusLabels.forEach(l => { l.textContent = statusText; });
 
@@ -2201,8 +2203,8 @@ function voiceAssistantModal() {
   input.addEventListener("keydown", e => e.key === "Enter" && sendTyped());
 
   const orbStateClass = S.voiceEmergency ? "emergency" :
-                        S.voiceListening ? "listening" :
-                        S.voiceSpeaking ? "speaking" : "idle";
+    S.voiceListening ? "listening" :
+      S.voiceSpeaking ? "speaking" : "idle";
 
   const chips = [
     "Log my BP 138 over 88 and pulse 76",
@@ -2212,14 +2214,16 @@ function voiceAssistantModal() {
     "I have severe chest pain and short of breath"
   ];
 
-  return h("div", { class: "modal-overlay", onclick: (e) => {
-    if (e.target.classList.contains("modal-overlay")) {
-      S.voiceModalOpen = false;
-      VoiceAgent.stopListening();
-      VoiceAgent.stopSpeaking();
-      render();
+  return h("div", {
+    class: "modal-overlay", onclick: (e) => {
+      if (e.target.classList.contains("modal-overlay")) {
+        S.voiceModalOpen = false;
+        VoiceAgent.stopListening();
+        VoiceAgent.stopSpeaking();
+        render();
+      }
     }
-  } },
+  },
     h("div", { class: "voice-modal-card" },
       h("button", {
         class: "modal-close-btn",
@@ -2260,9 +2264,9 @@ function voiceAssistantModal() {
         class: "voice-orb-status",
         style: "font-size:0.84rem; font-weight:700; color:" + (S.voiceEmergency ? "#DC2626" : "var(--accent)") + "; margin-bottom:1rem;"
       }, S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED — SEEK IMMEDIATE CARE" :
-         S.voiceListening ? "Listening to your voice... Speak now" :
-         S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
-         (S.voiceInterim || "Tap Orb or Microphone to Speak")),
+        S.voiceListening ? "Listening to your voice... Speak now" :
+          S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
+            (S.voiceInterim || "Tap Orb or Microphone to Speak")),
 
       h("div", { class: "voice-waveform" },
         ...Array.from({ length: 10 }, (_, i) => h("div", {
@@ -2316,7 +2320,7 @@ function voiceAssistantModal() {
         h("div", { class: "voice-reply-head" },
           h("span", { class: "voice-reply-title" },
             S.voiceLastReply.is_emergency ? "[ALERT] Emergency Medical Notification" :
-            (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
+              (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
           h("button", {
             class: "outline small",
             style: "padding:0.2rem 0.6rem; font-size:0.75rem;",
@@ -2375,8 +2379,8 @@ function voiceView() {
   ];
 
   const orbStateClass = S.voiceEmergency ? "emergency" :
-                        S.voiceListening ? "listening" :
-                        S.voiceSpeaking ? "speaking" : "idle";
+    S.voiceListening ? "listening" :
+      S.voiceSpeaking ? "speaking" : "idle";
 
   const latestVital = S.vitalsList && S.vitalsList[0] ? S.vitalsList[0] : {
     systolic: 124, diastolic: 80, pulse: 70, risk_flag: "normal"
@@ -2423,9 +2427,9 @@ function voiceView() {
           class: "voice-orb-status",
           style: "font-size:0.88rem; font-weight:700; color:" + (S.voiceEmergency ? "#DC2626" : "var(--accent)") + "; margin-bottom:1rem;"
         }, S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED — SEEK IMMEDIATE CARE" :
-           S.voiceListening ? "Listening to your voice... Speak now" :
-           S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
-           (S.voiceInterim || "Tap Orb or Microphone to Speak")),
+          S.voiceListening ? "Listening to your voice... Speak now" :
+            S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
+              (S.voiceInterim || "Tap Orb or Microphone to Speak")),
 
         h("div", { class: "voice-waveform" },
           ...Array.from({ length: 10 }, (_, i) => h("div", {
@@ -2479,7 +2483,7 @@ function voiceView() {
           h("div", { class: "voice-reply-head" },
             h("span", { class: "voice-reply-title" },
               S.voiceLastReply.is_emergency ? "[ALERT] Emergency Medical Notification" :
-              (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
+                (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
             h("button", {
               class: "outline small",
               style: "padding:0.2rem 0.6rem; font-size:0.75rem;",
@@ -2998,114 +3002,113 @@ function soapView() {
           disabled: S.soapGenerating,
           onclick: handleGenerate
         }, Icons.soap(), S.soapGenerating ? "Synthesizing Note..." : "Generate Encounter SOAP Note")));
-    );
 
-    const intakeConfigCard = h("div", { class: "card", style: "margin-bottom:1.4rem; background:var(--s1);" },
-      h("h4", { style: "margin:0 0 0.6rem 0; color:var(--accent);" }, "Encounter Parameters"),
-      h("div", { class: "grid2" },
-        h("div", {}, h("label", {}, "Encounter Type / CPT Service"), encounterSelect),
-        h("div", {}, h("label", {}, "Chief Complaint / Clinical Focus"), chiefComplaintInput)
+  const intakeConfigCard = h("div", { class: "card", style: "margin-bottom:1.4rem; background:var(--s1);" },
+    h("h4", { style: "margin:0 0 0.6rem 0; color:var(--accent);" }, "Encounter Parameters"),
+    h("div", { class: "grid2" },
+      h("div", {}, h("label", {}, "Encounter Type / CPT Service"), encounterSelect),
+      h("div", {}, h("label", {}, "Chief Complaint / Clinical Focus"), chiefComplaintInput)
+    )
+  );
+
+  let noteBody;
+  if (S.soapGenerating) {
+    noteBody = h("div", { class: "card", style: "text-align:center; padding:3rem;" },
+      h("div", { class: "loading-spinner", style: "margin:0 auto 1.2rem auto; width:36px; height:36px;" }),
+      h("h3", {}, "Synthesizing Multi-Agent Clinical SOAP Note..."),
+      h("p", { class: "mute" }, "Correlating patient vitals, knowledge graph pathways, ICD-10 diagnostic codes, and CPT billing relative value units (wRVU)..."));
+  } else if (cur) {
+    const isSigned = cur.status === "signed";
+    noteBody = h("div", { style: "display:flex; flex-direction:column; gap:1.2rem;" },
+      h("div", { class: "card" },
+        h("div", { style: "display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:0.9rem; margin-bottom:1.1rem; flex-wrap:wrap; gap:0.75rem;" },
+          h("div", {},
+            h("div", { style: "display:flex; align-items:center; gap:0.6rem;" },
+              h("h2", { style: "margin:0;" }, cur.encounter_type || "Clinical Consultation Note"),
+              h("span", { class: "soap-tag " + (isSigned ? "signed" : "draft") }, isSigned ? "SIGNED & SEALED" : "DRAFT NOTE")),
+            h("p", { class: "mute small", style: "margin:0.25rem 0 0 0;" },
+              `Note ID: ${cur.id} · Created: ${fmtDay(cur.created)} · Clinician: ${cur.clinician || "Dr. Specialist"}`)),
+          h("div", { style: "display:flex; gap:0.6rem;" },
+            !isSigned && h("button", { class: "outline", onclick: () => handleSign(cur.id) }, "Sign & Verify Note"),
+            h("button", {
+              class: "primary",
+              style: "background:var(--primary);",
+              onclick: () => window.open(`/clinical/soap-notes/${cur.id}/export`, "_blank")
+            }, "Export Clinical Dossier (PDF)")
+          )
+        ),
+
+        // S, O, A, P Sections
+        h("div", { style: "display:flex; flex-direction:column; gap:1.4rem;" },
+          h("div", { class: "soap-card-section" },
+            h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
+              h("span", { class: "soap-letter-badge s" }, "S"), "[S] SUBJECTIVE — Patient History & Symptoms"),
+            h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.subjective)),
+
+          h("div", { class: "soap-card-section" },
+            h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
+              h("span", { class: "soap-letter-badge o" }, "O"), "[O] OBJECTIVE — Biometric Telemetry & Physical Findings"),
+            h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.objective)),
+
+          h("div", { class: "soap-card-section" },
+            h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
+              h("span", { class: "soap-letter-badge a" }, "A"), "[A] ASSESSMENT — Diagnoses & Multi-Agent MDM"),
+            h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.assessment),
+            h("div", { style: "margin-top:1.2rem;" },
+              h("h4", { style: "margin:0 0 0.5rem 0;" }, "ICD-10-CM Clinical Diagnostic Codes:"),
+              h("div", { class: "table-wrap" },
+                h("table", {},
+                  h("thead", {},
+                    h("tr", {}, h("th", {}, "ICD-10 Code"), h("th", {}, "Description"), h("th", {}, "Diagnostic Category"))),
+                  h("tbody", {},
+                    (cur.icd10_codes || []).map(c => h("tr", {},
+                      h("td", {}, h("code", {}, c.code)),
+                      h("td", { style: "font-weight:700;" }, c.desc),
+                      h("td", {}, c.category)))))))),
+
+          h("div", { class: "soap-card-section" },
+            h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
+              h("span", { class: "soap-letter-badge p" }, "P"), "[P] PLAN — Directives, Telemetry & Billing Codification"),
+            h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.plan),
+            h("div", { style: "margin-top:1.2rem;" },
+              h("h4", { style: "margin:0 0 0.5rem 0;" }, "Evaluation & Management (E/M) & Telehealth CPT Billing Codes:"),
+              h("div", { class: "table-wrap" },
+                h("table", {},
+                  h("thead", {},
+                    h("tr", {}, h("th", {}, "CPT Code"), h("th", {}, "Service Description"), h("th", {}, "Relative Value (wRVU)"))),
+                  h("tbody", {},
+                    (cur.cpt_codes || []).map(c => h("tr", {},
+                      h("td", {}, h("code", {}, c.code)),
+                      h("td", {}, c.desc),
+                      h("td", { style: "font-weight:700; color:var(--accent);" }, String(c.wRVU))))))))
+          )
+        ),
+
+        // Cryptographic Signature Footer
+        isSigned ? h("div", { style: "margin-top:1.4rem; padding:0.9rem 1.2rem; background:#D1FAE5; border:1px solid #10B981; border-radius:8px; font-size:0.82rem; color:#065F46;" },
+          h("strong", {}, "✓ Cryptographically Signed: "), `${cur.clinician} · Signature Hash: ${cur.signature_hash}`
+        ) : null
       )
     );
+  } else {
+    noteBody = h("div", { class: "card", style: "text-align:center; padding:3rem;" },
+      h("p", { class: "mute" }, "No SOAP notes generated for this patient yet. Click 'Generate New SOAP Note' above to create one."));
+  }
 
-    let noteBody;
-    if (S.soapGenerating) {
-      noteBody = h("div", { class: "card", style: "text-align:center; padding:3rem;" },
-        h("div", { class: "loading-spinner", style: "margin:0 auto 1.2rem auto; width:36px; height:36px;" }),
-        h("h3", {}, "Synthesizing Multi-Agent Clinical SOAP Note..."),
-        h("p", { class: "mute" }, "Correlating patient vitals, knowledge graph pathways, ICD-10 diagnostic codes, and CPT billing relative value units (wRVU)..."));
-    } else if (cur) {
-      const isSigned = cur.status === "signed";
-      noteBody = h("div", { style: "display:flex; flex-direction:column; gap:1.2rem;" },
-        h("div", { class: "card" },
-          h("div", { style: "display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:0.9rem; margin-bottom:1.1rem; flex-wrap:wrap; gap:0.75rem;" },
-            h("div", {},
-              h("div", { style: "display:flex; align-items:center; gap:0.6rem;" },
-                h("h2", { style: "margin:0;" }, cur.encounter_type || "Clinical Consultation Note"),
-                h("span", { class: "soap-tag " + (isSigned ? "signed" : "draft") }, isSigned ? "SIGNED & SEALED" : "DRAFT NOTE")),
-              h("p", { class: "mute small", style: "margin:0.25rem 0 0 0;" },
-                `Note ID: ${cur.id} · Created: ${fmtDay(cur.created)} · Clinician: ${cur.clinician || "Dr. Specialist"}`)),
-            h("div", { style: "display:flex; gap:0.6rem;" },
-              !isSigned && h("button", { class: "outline", onclick: () => handleSign(cur.id) }, "Sign & Verify Note"),
-              h("button", {
-                class: "primary",
-                style: "background:var(--primary);",
-                onclick: () => window.open(`/clinical/soap-notes/${cur.id}/export`, "_blank")
-              }, "Export Clinical Dossier (PDF)")
-            )
-          ),
+  box.replaceChildren(
+    h("div", { class: "page-head" },
+      h("div", { class: "title-block" },
+        h("div", { class: "eyebrow" }, "Clinical Documentation"),
+        h("h1", {}, "Clinical SOAP Encounter Notes & Billing"),
+        h("p", { class: "mute" }, "Automated Subjective, Objective, Assessment, and Plan notes with ICD-10 and CPT coding"))),
+    notesListHeader,
+    intakeConfigCard,
+    noteBody
+  );
+};
 
-          // S, O, A, P Sections
-          h("div", { style: "display:flex; flex-direction:column; gap:1.4rem;" },
-            h("div", { class: "soap-card-section" },
-              h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
-                h("span", { class: "soap-letter-badge s" }, "S"), "[S] SUBJECTIVE — Patient History & Symptoms"),
-              h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.subjective)),
-
-            h("div", { class: "soap-card-section" },
-              h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
-                h("span", { class: "soap-letter-badge o" }, "O"), "[O] OBJECTIVE — Biometric Telemetry & Physical Findings"),
-              h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.objective)),
-
-            h("div", { class: "soap-card-section" },
-              h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
-                h("span", { class: "soap-letter-badge a" }, "A"), "[A] ASSESSMENT — Diagnoses & Multi-Agent MDM"),
-              h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.assessment),
-              h("div", { style: "margin-top:1.2rem;" },
-                h("h4", { style: "margin:0 0 0.5rem 0;" }, "ICD-10-CM Clinical Diagnostic Codes:"),
-                h("div", { class: "table-wrap" },
-                  h("table", {},
-                    h("thead", {},
-                      h("tr", {}, h("th", {}, "ICD-10 Code"), h("th", {}, "Description"), h("th", {}, "Diagnostic Category"))),
-                    h("tbody", {},
-                      (cur.icd10_codes || []).map(c => h("tr", {},
-                        h("td", {}, h("code", {}, c.code)),
-                        h("td", { style: "font-weight:700;" }, c.desc),
-                        h("td", {}, c.category)))))))),
-
-            h("div", { class: "soap-card-section" },
-              h("h3", { style: "display:flex; align-items:center; margin-top:0;" },
-                h("span", { class: "soap-letter-badge p" }, "P"), "[P] PLAN — Directives, Telemetry & Billing Codification"),
-              h("div", { style: "font-size:0.88rem; line-height:1.6; white-space:pre-wrap; color:var(--t2);" }, cur.plan),
-              h("div", { style: "margin-top:1.2rem;" },
-                h("h4", { style: "margin:0 0 0.5rem 0;" }, "Evaluation & Management (E/M) & Telehealth CPT Billing Codes:"),
-                h("div", { class: "table-wrap" },
-                  h("table", {},
-                    h("thead", {},
-                      h("tr", {}, h("th", {}, "CPT Code"), h("th", {}, "Service Description"), h("th", {}, "Relative Value (wRVU)"))),
-                    h("tbody", {},
-                      (cur.cpt_codes || []).map(c => h("tr", {},
-                        h("td", {}, h("code", {}, c.code)),
-                        h("td", {}, c.desc),
-                        h("td", { style: "font-weight:700; color:var(--accent);" }, String(c.wRVU))))))))
-            )
-          ),
-
-          // Cryptographic Signature Footer
-          isSigned ? h("div", { style: "margin-top:1.4rem; padding:0.9rem 1.2rem; background:#D1FAE5; border:1px solid #10B981; border-radius:8px; font-size:0.82rem; color:#065F46;" },
-            h("strong", {}, "✓ Cryptographically Signed: "), `${cur.clinician} · Signature Hash: ${cur.signature_hash}`
-          ) : null
-        )
-      );
-    } else {
-      noteBody = h("div", { class: "card", style: "text-align:center; padding:3rem;" },
-        h("p", { class: "mute" }, "No SOAP notes generated for this patient yet. Click 'Generate New SOAP Note' above to create one."));
-    }
-
-    box.replaceChildren(
-      h("div", { class: "page-head" },
-        h("div", { class: "title-block" },
-          h("div", { class: "eyebrow" }, "Clinical Documentation"),
-          h("h1", {}, "Clinical SOAP Encounter Notes & Billing"),
-          h("p", { class: "mute" }, "Automated Subjective, Objective, Assessment, and Plan notes with ICD-10 and CPT coding"))),
-      notesListHeader,
-      intakeConfigCard,
-      noteBody
-    );
-  };
-
-  loadNotes();
-  return box;
+loadNotes();
+return box;
 }
 
 // Main Bootstrapping & Routing
