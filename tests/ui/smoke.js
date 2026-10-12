@@ -1,0 +1,32 @@
+const { JSDOM } = require("jsdom"); const fs = require("fs");
+const B = "http://localhost:8765/app/";
+(async () => {
+  const dom = new JSDOM(fs.readFileSync("../../static/index.html", "utf8").replace('<script src="app.js"></script>', ""), { url: B, runScripts: "outside-only", pretendToBeVisual: true });
+  const w = dom.window; w.fetch = (u, o) => fetch(new URL(u, B).href, o); w.alert = m => { console.log("ALERT", m); }; w.prompt = () => "edited text";
+  w.eval(fs.readFileSync("../../static/app.js", "utf8"));
+  const $ = s => w.document.querySelector(s), $$ = s => [...w.document.querySelectorAll(s)];
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const btn = t => $$("button").find(b => b.textContent.trim() === t);
+  const login = async (u, p) => { $("#u").value = u; $("#p").value = p; btn("Login").click(); await wait(600); };
+  await login("teacher1", "teacher-pass-123");
+  console.log("teacher sees New case button:", !!btn("New case"));
+  btn("New case").click(); await wait(100);
+  $("#student_id").value = "DEMO-1"; $("#age").value = 10;
+  $$("input[type=checkbox]").filter(c => ["adhd", "dyslexia"].includes(c.value)).forEach(c => c.checked = true);
+  $("#academic").value = "reading: 48, math: 72, writing: 55"; $("#behavior").value = "loses focus, fidgets\nanxious about reading aloud";
+  $("#incidents").value = 4; btn("Generate draft plan").click(); await wait(1500);
+  console.log("form err:", $(".err") && $(".err").textContent); console.log("title:", $("h1").textContent, "| banner:", $(".banner").textContent.slice(0, 70));
+  const items = $$(".item"); console.log("items:", items.length);
+  for (const it of items) { [...it.querySelectorAll(".decide button")][0].click(); await wait(250); }
+  console.log("approve enabled:", !btn("Approve plan").disabled);
+  btn("Approve plan").click(); await wait(500);
+  console.log("after approve:", $(".banner").textContent);
+  btn("Explainability").click(); await wait(50);
+  btn("Why these?").click(); await wait(50); console.log("why tab has debate cards:", $$(".card").length);
+  btn("Background reading").click(); await wait(50); console.log("reading cards:", $$(".card").length);
+  btn("Logout").click(); await wait(100);
+  await login("parent1", "parent-pass-1234");
+  console.log("parent view:", $("h1").textContent, "| has staff buttons:", !!btn("New case"), "| has Approve:", !!btn("Approve plan"));
+  console.log("parent text snippet:", $("pre").textContent.slice(0, 80).replace(/\n/g, " "));
+  process.exit(0);
+})().catch(e => { console.error("FAIL", e); process.exit(1); });

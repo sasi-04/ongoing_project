@@ -1,0 +1,16 @@
+# docker compose up --build        (first run: docker compose exec ollama ollama pull llama3.1:8b nomic-embed-text)
+services:
+  careai:
+    build: .
+    env_file: .env
+    environment:
+      OLLAMA_URL: http://ollama:11434
+    ports: ["127.0.0.1:8000:8000"]   # put a TLS-terminating reverse proxy (Caddy/nginx) in front; never expose plain HTTP
+    volumes: ["careai_data:/app/var"]
+    depends_on: [ollama]
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama
+    volumes: ["ollama_models:/root/.ollama"]
+    restart: unless-stopped
+volumes: {careai_data: {}, ollama_models: {}}

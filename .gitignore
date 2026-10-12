@@ -1,0 +1,7 @@
+.env
+data/.devkey
+data/.jwtsecret
+data/*.db
+data/.embed_cache.json
+__pycache__/
+.pytest_cache/

@@ -1,0 +1,15 @@
+{"_notice":"SYNTHETIC cases with PLACEHOLDER 'expert' labels written by the developer. Use ONLY for smoke-testing the evaluation harness. Real validation needs expert-authored plans on de-identified real cases.",
+ "cases":[
+ {"case":{"student_id":"SYN-001","age":9,"conditions":["dyslexia"],"academic":{"reading":45,"math":78},"academic_history":{"reading":[50,47,45]},"behavior_notes":["slow reading, sound out words with effort","anxious when asked to read aloud"],"vision_notes":"skips lines when reading","incidents_last_30d":0,"attendance_rate":0.95},
+  "expert_plan_ids":["I_STRUCT_LIT","I_TTS","I_FONT_SPACING","I_EXT_TIME"],"relevant_ids":["I_STRUCT_LIT","I_TTS","I_FONT_SPACING","I_EXT_TIME","I_KEYBOARD"]},
+ {"case":{"student_id":"SYN-002","age":7,"conditions":["asd"],"academic":{"reading":65,"math":70},"behavior_notes":["meltdown during schedule change","covers ears in loud assembly","difficulty with transition"],"speech_notes":"minimally verbal, uses gestures","incidents_last_30d":7,"attendance_rate":0.88},
+  "expert_plan_ids":["I_VIS_SCHED","I_SENS_QUIET","I_CALM_PLAN","I_AAC","I_SLP","I_SOC_SKILLS"],"relevant_ids":["I_VIS_SCHED","I_SENS_QUIET","I_CALM_PLAN","I_AAC","I_SLP","I_SOC_SKILLS","I_VISUAL_LANG"]},
+ {"case":{"student_id":"SYN-003","age":11,"conditions":["adhd"],"medical_notes":"ADHD, on medication reviewed by pediatrician","academic":{"math":58,"writing":52},"behavior_notes":["off-task, loses focus","blurts answers","fidgets"],"incidents_last_30d":3,"attendance_rate":0.97},
+  "expert_plan_ids":["I_MOVE_BREAKS","I_CHUNK_TASKS","I_ORG_SUPPORT","I_MED_COORD"],"relevant_ids":["I_MOVE_BREAKS","I_CHUNK_TASKS","I_ORG_SUPPORT","I_MED_COORD","I_PREF_SEAT"]},
+ {"case":{"student_id":"SYN-004","age":10,"conditions":["adhd","dyslexia"],"academic":{"reading":48,"math":72,"writing":55},"behavior_notes":["loses focus, fidgets","anxious about reading aloud"],"vision_notes":"loses place when reading","incidents_last_30d":4,"attendance_rate":0.9},
+  "expert_plan_ids":["I_STRUCT_LIT","I_TTS","I_MOVE_BREAKS","I_CHUNK_TASKS","I_ORG_SUPPORT","I_MED_COORD","I_FONT_SPACING"],"relevant_ids":["I_STRUCT_LIT","I_TTS","I_MOVE_BREAKS","I_CHUNK_TASKS","I_ORG_SUPPORT","I_MED_COORD","I_FONT_SPACING","I_EXT_TIME","I_KEYBOARD"]},
+ {"case":{"student_id":"SYN-005","age":8,"conditions":["speech_language"],"academic":{"reading":72},"speech_notes":"unclear speech, mispronounces several sounds, occasional stutter","incidents_last_30d":0,"attendance_rate":0.99},
+  "expert_plan_ids":["I_SLP","I_VISUAL_LANG"],"relevant_ids":["I_SLP","I_VISUAL_LANG","I_AAC"]},
+ {"case":{"student_id":"SYN-006","age":12,"conditions":["sld_math","sld_writing"],"academic":{"math":42,"writing":50},"academic_history":{"math":[52,47,42]},"behavior_notes":["math anxiety","illegible handwriting"],"incidents_last_30d":1,"attendance_rate":0.93},
+  "expert_plan_ids":["I_MATH_CRA","I_CALC_AID","I_KEYBOARD","I_OT_HAND"],"relevant_ids":["I_MATH_CRA","I_CALC_AID","I_KEYBOARD","I_OT_HAND","I_EXT_TIME"]}
+]}
