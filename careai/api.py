@@ -32,37 +32,37 @@ def seed_demo_data():
     for u, p, r, s in [
         ("admin", admin_pw, "admin", []),
         ("clinician", "clinician123", "clinician", []),
-        ("patient", "patient123", "patient", ["John Doe"]),
-        ("parent", "parent123", "parent", ["John Doe", "Priya S"])
+        ("patient", "patient123", "patient", ["Priya S"]),
+        ("parent", "parent123", "parent", ["Priya S", "Meena R", "Arjun K", "John Doe"])
     ]:
         if not store.get_user(u):
             store.add_user(u, auth.hash_password(p), r, s)
 
     demo_cases = [
         StudentCase(
-            student_id="John Doe",
-            age=34,
-            grade="Adult_Patient",
-            conditions=["adhd"],
-            medical_notes="Elevated blood pressure detected. Irregular sleep pattern (5-6 hours). Possible risk of hypertension, family history present. Recommend lifestyle modification and regular BP monitoring.",
-            academic={"reading": 78.0, "math": 82.0, "science": 74.0},
-            behavior_notes=["Fidgeting during long lectures", "Restlessness after lunch", "Mild stress before exams"],
-            speech_notes="Articulate, normal vocabulary.",
-            vision_notes="20/20 vision, occasional screen fatigue.",
-            attendance_rate=0.94,
-            incidents_last_30d=1
-        ),
-        StudentCase(
             student_id="Priya S",
             age=11,
             grade="6th",
             conditions=["dyslexia", "sld_math"],
-            medical_notes="Pediatric evaluation normal. High visual-spatial skills. Phonological decoding challenges.",
+            medical_notes="Pediatric neuropsychological evaluation: high visual-spatial aptitude with severe phonological decoding delay. Timed testing induces acute panic.",
             academic={"reading": 48.0, "math": 52.0, "science": 86.0},
-            behavior_notes=["Cooperative", "Anxious during timed reading", "Thrives in hands-on projects"],
-            speech_notes="Receptive language within normal limits.",
-            vision_notes="Tracking fatigue; benefits from enlarged font spacing.",
+            behavior_notes=["Cooperative", "Anxious during timed oral reading", "Thrives in multisensory, hands-on learning"],
+            speech_notes="Receptive language within normal limits; phonological processing delays.",
+            vision_notes="Visual tracking fatigue; significant improvement with enlarged font spacing and ruler guides.",
             attendance_rate=0.96,
+            incidents_last_30d=0
+        ),
+        StudentCase(
+            student_id="Meena R",
+            age=8,
+            grade="3rd",
+            conditions=["asd", "speech_language"],
+            medical_notes="Autism spectrum profile with sensory modulation challenges. Acute acoustic sensitivity in loud school environments.",
+            academic={"reading": 62.0, "math": 70.0},
+            behavior_notes=["Thrives on predictable visual routines", "Sensory overload during unstructured transitions or assemblies"],
+            speech_notes="Benefits from visual schedules and AAC symbol supports; occasional echolalia under stress.",
+            vision_notes="Visual learner with strong pattern recognition.",
+            attendance_rate=0.95,
             incidents_last_30d=0
         ),
         StudentCase(
@@ -70,26 +70,26 @@ def seed_demo_data():
             age=9,
             grade="4th",
             conditions=["adhd"],
-            medical_notes="ADHD combined type. Clinician monitoring medication timeline.",
+            medical_notes="ADHD combined presentation. Executive functioning fatigue and working memory limitations.",
             academic={"reading": 68.0, "math": 75.0, "science": 70.0},
-            behavior_notes=["High motor activity", "Impulsive answering", "Responds very well to visual timers and praise"],
-            speech_notes="Clear articulation, rapid speech cadence.",
-            vision_notes="Normal.",
+            behavior_notes=["High motor activity", "Impulsive answering", "Responds exceptionally well to visual timers, task chunking, and movement breaks"],
+            speech_notes="Clear articulation, rapid expressive cadence.",
+            vision_notes="Normal ocular motility.",
             attendance_rate=0.90,
             incidents_last_30d=3
         ),
         StudentCase(
-            student_id="Meena R",
-            age=8,
-            grade="3rd",
-            conditions=["asd", "speech_language"],
-            medical_notes="Autism spectrum profile. Acoustic sensitivity in crowded environments.",
-            academic={"reading": 62.0, "math": 70.0},
-            behavior_notes=["Prefers structured routines", "Covers ears during sudden loud alarms"],
-            speech_notes="Benefits from visual schedules and AAC symbol supports.",
-            vision_notes="Normal.",
-            attendance_rate=0.95,
-            incidents_last_30d=0
+            student_id="John Doe",
+            age=34,
+            grade="Adult_Exploratory",
+            conditions=["adhd"],
+            medical_notes="Adult exploratory telemetry profile. Elevated resting blood pressure and irregular sleep patterns under investigation.",
+            academic={"reading": 78.0, "math": 82.0, "science": 74.0},
+            behavior_notes=["Restlessness during sedentary work", "Workplace attentional fatigue"],
+            speech_notes="Articulate, normal vocabulary.",
+            vision_notes="Screen fatigue.",
+            attendance_rate=0.94,
+            incidents_last_30d=1
         )
     ]
     if len(store.list_plans()) == 0:

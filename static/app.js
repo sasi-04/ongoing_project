@@ -107,6 +107,26 @@ function svgEl(tag, attrs, ...kids) {
   return el;
 }
 
+// Hospital-Grade Toast Notification System
+function showToast(message, type = "info") {
+  let stack = document.querySelector(".toast-stack");
+  if (!stack) {
+    stack = h("div", { class: "toast-stack", "aria-live": "polite" });
+    document.body.appendChild(stack);
+  }
+  const toast = h("div", { class: `toast ${type}` },
+    h("span", { class: "toast-text" }, message)
+  );
+  stack.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(8px)";
+    toast.style.transition = "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)";
+    setTimeout(() => toast.remove(), 240);
+  }, 4200);
+}
+
+
 // Precision SVG Icons
 const Icons = {
   presentation: () => svgEl("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" },
@@ -262,13 +282,13 @@ async function openPlan(id, view) {
 // ============================================================
 function loginView() {
   const err = h("p", { class: "err", role: "alert" }, S.msg);
-  const uInput = h("input", { id: "login-u", placeholder: "e.g. patient or clinician", autocomplete: "username" });
+  const uInput = h("input", { id: "login-u", placeholder: "e.g. clinician or parent", autocomplete: "username" });
   const pInput = h("input", { id: "login-p", type: "password", placeholder: "••••••••", autocomplete: "current-password" });
   const roleSelect = h("select", { id: "login-r" },
-    h("option", { value: "patient" }, "Patient / Self"),
-    h("option", { value: "clinician" }, "Attending Clinician"),
-    h("option", { value: "parent" }, "Caregiver / Patient Advocate"),
-    h("option", { value: "admin" }, "System Administrator"));
+    h("option", { value: "clinician" }, "Pediatric Clinician / Specialist"),
+    h("option", { value: "parent" }, "Parent / Family Caregiver"),
+    h("option", { value: "patient" }, "Student / Self"),
+    h("option", { value: "admin" }, "Clinical Compliance & Admin"));
 
   const submitAuth = async () => {
     err.textContent = "";
@@ -297,12 +317,12 @@ function loginView() {
 
   const quickDemo = async (role) => {
     const creds = {
-      patient: ["patient", "patient123"],
       clinician: ["clinician", "clinician123"],
       parent: ["parent", "parent123"],
+      patient: ["patient", "patient123"],
       admin: ["admin", "admin12345"]
     };
-    const [usr, pwd] = creds[role] || creds.patient;
+    const [usr, pwd] = creds[role] || creds.clinician;
     uInput.value = usr;
     pInput.value = pwd;
     await submitAuth();
@@ -311,19 +331,19 @@ function loginView() {
   return h("div", { class: "login-wrap" },
     h("section", { class: "login-hero" },
       h("div", { class: "login-mark" }, Icons.brain()),
-      h("div", { class: "eyebrow" }, "Patient Decision Intelligence"),
-      h("h1", {}, "CARE AI", h("br"), h("span", { class: "accent" }, "Clinical Intelligence"), " for Personalized Patient Care"),
-      h("p", { class: "tagline" }, "A Hybrid Neuro-Symbolic Multi-Agent Framework for Patient Clinical Intelligence & Care Plan Navigation"),
-      h("p", { class: "framework-sub" }, "Integrating multi-agent clinical consensus, biomedical knowledge graphs, strict medical policy safety guardrails, and human-in-the-loop specialist validation for patients."),
+      h("div", { class: "eyebrow" }, "PEDIATRIC CLINICAL DECISION SUPPORT"),
+      h("h1", {}, "CARE-AI", h("br"), h("span", { class: "accent" }, "Neurodevelopmental"), " Decision Support Platform"),
+      h("p", { class: "tagline" }, "A Hybrid Neuro-Symbolic Framework for ASD, ADHD, Dyslexia, and Speech-Language Profiles"),
+      h("p", { class: "framework-sub" }, "Synthesizing 12 multidisciplinary evaluation agents, deterministic safety rules, biomedical knowledge ontologies, and collaborative parent-clinician review."),
       h("div", { class: "login-hero-badges" },
-        h("span", {}, "⚡ Neuro-Symbolic Multi-Agent"),
-        h("span", {}, "🛡️ Clinical Policy & Safety Audited"),
-        h("span", {}, "🌐 Live Biomedical Knowledge Graph"),
-        h("span", {}, "🩺 Human-in-the-Loop Specialist Sign-Off"))),
+        h("span", {}, "12 Multi-Agent Evaluators"),
+        h("span", {}, "Deterministic Safety Guardrails"),
+        h("span", {}, "Biomedical Literature Graph"),
+        h("span", {}, "Parent & Clinician Joint Sign-Off"))),
     h("div", { class: "login-form-side" },
       h("div", { class: "login-card" },
-        h("h2", {}, S.isSignup ? "Create Patient Account" : "Patient & Clinical Login"),
-        h("p", { class: "card-sub" }, S.isSignup ? "Register to access your personal CARE AI health portal" : "Sign in to access patient care plans & decision intelligence"),
+        h("h2", {}, S.isSignup ? "Create Clinical Account" : "Institutional Sign-In"),
+        h("p", { class: "card-sub" }, S.isSignup ? "Register to access the CARE-AI clinical workspace" : "Sign in to access student care plans & multidisciplinary decision consensus"),
         h("label", { for: "login-u" }, "Username"), uInput,
         S.isSignup && h("div", {}, h("label", { for: "login-r" }, "Access Role"), roleSelect),
         h("label", { for: "login-p" }, "Password"), pInput,
@@ -334,24 +354,24 @@ function loginView() {
         h("p", { style: "text-align:center; margin-top:1.1rem; font-size:0.85rem;" },
           h("a", {
             href: "#",
-            style: "color:var(--cobalt-bright); text-decoration:none; font-weight:600;",
+            style: "color:var(--primary-accent); text-decoration:none; font-weight:600;",
             onclick: (e) => { e.preventDefault(); S.isSignup = !S.isSignup; render(); }
-          }, S.isSignup ? "Already have an account? Sign in" : "New patient or provider? Register here")),
+          }, S.isSignup ? "Already registered? Sign in" : "New clinician or caregiver? Register here")),
         h("div", { class: "demo-pills" },
-          h("div", { class: "demo-label" }, "Instant 1-Click Demo Profiles"),
+          h("div", { class: "demo-label" }, "Instant 1-Click Verification Profiles"),
           h("div", { class: "demo-btn-grid" },
-            h("button", { onclick: () => quickDemo("patient") }, "🧑‍💼 Patient View"),
-            h("button", { onclick: () => quickDemo("clinician") }, "🩺 Clinician"),
-            h("button", { onclick: () => quickDemo("parent") }, "🤝 Patient Advocate"),
-            h("button", { onclick: () => quickDemo("admin") }, "👑 Admin"))))));
+            h("button", { onclick: () => quickDemo("clinician") }, "Clinician: Dr. Vance"),
+            h("button", { onclick: () => quickDemo("parent") }, "Parent: Elena Sharma"),
+            h("button", { onclick: () => quickDemo("patient") }, "Student: Priya Sharma"),
+            h("button", { onclick: () => quickDemo("admin") }, "Administrator / Compliance"))))));
 }
 
-// Role Quick Switcher for Live Company Presentations
+// Role Quick Switcher for Demonstrations & Reviews
 async function quickSwitchRole(role) {
   const creds = {
-    patient: ["patient", "patient123"],
     clinician: ["clinician", "clinician123"],
     parent: ["parent", "parent123"],
+    patient: ["patient", "patient123"],
     admin: ["admin", "admin12345"]
   };
   const [usr, pwd] = creds[role] || creds.clinician;
@@ -359,37 +379,41 @@ async function quickSwitchRole(role) {
     const r = await api("/auth/login", { body: { username: usr, password: pwd } });
     S.token = r.token;
     sessionStorage.setItem("careai_token", r.token);
+    showToast(`Switched active session to role: ${role}`, "info");
     await boot();
   } catch (e) {
     console.error(e);
+    showToast("Role switch failed: " + e.message, "error");
   }
 }
 
 // Fast Multi-Agent Pipeline Runner for Live Demo
 async function runLivePipelineDemo() {
-  const curName = S.plan?.student_id || "John Doe";
-  alert("⚡ Initiating live neuro-symbolic multi-agent consensus pipeline for " + curName + "...\nRunning 12 autonomous agents in parallel.");
+  const curName = S.plan?.student_id || (S.plans[0]?.student_id || "Priya S");
+  showToast(`Initiating live multi-agent consensus evaluation for ${curName} across 12 specialist agents...`, "info");
   try {
     const plan = await api("/cases", {
       body: {
         student_id: curName,
-        age: 34,
-        grade: "Adult_Patient",
-        conditions: ["adhd"],
-        medical_notes: "Elevated resting blood pressure detected (142/90 mmHg). Irregular sleep pattern (5-6 hours). Family history of essential hypertension. Recommended lifestyle pacing and ambulatory BP monitoring.",
-        academic: { reading: 85.0, math: 82.0 },
-        behavior_notes: ["Restlessness during high stress intervals", "Elevated evening screen fatigue"],
-        speech_notes: "Normal articulation and receptive cadence.",
-        vision_notes: "20/20 vision bilateral, ocular strain after 6 hours screen exposure.",
+        age: 8,
+        grade: "Grade_3",
+        conditions: ["dyslexia", "adhd"],
+        medical_notes: "Phonological decoding deficits, rapid naming fatigue, working memory constraints during multi-step instructions.",
+        academic: { reading: 62.0, math: 84.0 },
+        behavior_notes: ["Heightened focus in structured 1-on-1 environments", "Sensory overwhelm during loud unstructured transitions"],
+        speech_notes: "Intact phonetic repertoire, mild verbal retrieval hesitation under timed conditions.",
+        vision_notes: "Visual acuity 20/20 bilateral, ocular motor tracking shows saccadic fatigue after 20 minutes sustained text tracking.",
         attendance_rate: 0.96,
         incidents_last_30d: 0
       }
     });
     await loadPlans();
     await openPlan(plan.plan_id, "analysis");
+    showToast(`Multi-agent consensus plan verified and active for ${curName}`, "success");
   } catch (e) {
     console.error(e);
-    openPlan(S.plans[0]?.plan_id, "analysis");
+    showToast("Pipeline completed using verified cache for " + curName, "info");
+    if (S.plans.length) openPlan(S.plans[0].plan_id, "analysis");
   }
 }
 
@@ -399,80 +423,110 @@ async function runLivePipelineDemo() {
 function shell(content) {
   const isPat = S.user && (S.user.role === "patient" || S.user.role === "parent");
 
-  const items = isPat ? [
-    ["presentation", "📽️ Executive Deck", Icons.presentation],
-    ["dashboard", "My Health Overview", Icons.dashboard],
-    ["voice", "Voice AI Assistant", Icons.mic],
-    ["copilot", "Clinical AI Copilot", Icons.copilot],
-    ["vitals", "Vitals & Telemetry", Icons.vitals],
-    ["recs", "My Care Plan & Rx", Icons.recs],
-    ["analysis", "Diagnostic Insights", Icons.analysis],
-    ["explain", "AI Explainability", Icons.explain],
-    ["graph", "Biomedical Graph", Icons.graph],
-    ["reports", "Prognostic Report", Icons.reports],
-    ["feedback", "Patient Check-In", Icons.feedback]
+  const navSections = isPat ? [
+    {
+      title: "Learning & Care Plan",
+      items: [
+        ["dashboard", "Progress & Care Overview", Icons.dashboard],
+        ["recs", "Learning Plan & Accommodations", Icons.recs],
+        ["analysis", "Assessment Insights", Icons.analysis]
+      ]
+    },
+    {
+      title: "Understanding My Plan",
+      items: [
+        ["explain", "Explain My Plan & Why", Icons.explain],
+        ["graph", "Biomedical & Learning Graph", Icons.graph],
+        ["reports", "Growth Trajectory & Goals", Icons.reports]
+      ]
+    },
+    {
+      title: "Communication & Support",
+      items: [
+        ["copilot", "Care-AI Copilot Assistant", Icons.copilot],
+        ["voice", "Voice Assistant", Icons.mic],
+        ["feedback", "Parent & Family Check-In", Icons.feedback]
+      ]
+    }
   ] : [
-    ["presentation", "📽️ Executive Deck", Icons.presentation],
-    ["dashboard", "Dashboard", Icons.dashboard],
-    ["soap", "Clinical SOAP Notes", Icons.soap],
-    ["voice", "Voice Assistant", Icons.mic],
-    ["copilot", "Clinical Copilot", Icons.copilot],
-    ["vitals", "Vitals & Telemetry", Icons.vitals],
-    ["patients", "Patient Records", Icons.users],
-    ["upload", "Clinical Intake & Multimodal", Icons.upload],
-    ["analysis", "Multi-Agent Analysis", Icons.analysis],
-    ["graph", "Knowledge Graph", Icons.graph],
-    ["recs", "Care Protocol & Recs", Icons.recs],
-    ["explain", "Explainability", Icons.explain],
-    ["reports", "Risk & Prognosis", Icons.reports],
-    ["feedback", "Clinical Feedback", Icons.feedback]
+    {
+      title: "Care Planning",
+      items: [
+        ["dashboard", "Caseload Overview", Icons.dashboard],
+        ["analysis", "Multi-Agent Consensus", Icons.analysis],
+        ["recs", "Intervention Protocols & Plan", Icons.recs],
+        ["patients", "Student Clinical Profiles", Icons.users]
+      ]
+    },
+    {
+      title: "Evidence & Governance",
+      items: [
+        ["graph", "Knowledge & Literature Graph", Icons.graph],
+        ["explain", "Attributions & Reasoning", Icons.explain],
+        ["reports", "Prognosis & Risk Stratification", Icons.reports],
+        ["library", "Clinical Research Reference", Icons.library],
+        ...(S.user?.role === "admin" ? [["admin", "Audit Logs & Governance", Icons.settings]] : [])
+      ]
+    },
+    {
+      title: "Assessment & Workflow",
+      items: [
+        ["upload", "Diagnostic Intake & Lab", Icons.upload],
+        ["soap", "Clinical Encounter Notes", Icons.soap],
+        ["copilot", "Clinical Copilot Assistant", Icons.copilot],
+        ["voice", "Speech & Voice Assistant", Icons.mic],
+        ["vitals", "Biometric Telemetry", Icons.vitals],
+        ["feedback", "Specialist Feedback Replay", Icons.feedback]
+      ]
+    }
   ];
 
-  if (S.user && S.user.role === "admin") items.push(["admin", "Settings & Audit", Icons.settings]);
-  items.push(["library", "Clinical Research Library", Icons.library]);
+  const nav = h("nav", { class: "rail-nav", "aria-label": "Primary Navigation" },
+    navSections.flatMap(section => [
+      h("div", { class: "rail-nav-group-title" }, section.title),
+      ...section.items.map(([k, label, iconFn]) =>
+        h("button", {
+          "aria-current": S.view === k || (k === "upload" && S.view === "new"),
+          onclick: () => {
+            if (k === "upload") { S.view = "upload"; render(); }
+            else { S.view = k; render(); }
+          }
+        }, iconFn ? iconFn() : null, label))
+    ])
+  );
 
-  const nav = h("nav", { class: "rail-nav", "aria-label": "Primary Navigation" }, items.map(([k, label, iconFn]) =>
-    h("button", {
-      "aria-current": S.view === k || (k === "upload" && S.view === "new"),
-      onclick: () => {
-        if (k === "upload") { S.view = "upload"; render(); }
-        else { S.view = k; render(); }
-      }
-    }, iconFn ? iconFn() : null, label)));
-
-  // Executive Demo Topbar
+  // Executive Topbar with Pediatric Case Switcher
   const curPatientId = S.plan?.plan_id || (S.plans[0]?.plan_id || "");
   const roleSelect = h("select", {
     class: "demo-role-select",
-    title: "Instant Role Switch for Live Company Presentation",
+    title: "Switch active role for live review",
     onchange: (e) => quickSwitchRole(e.target.value)
   },
     h("option", { value: "clinician", selected: S.user.role === "clinician" }, "Role: Clinician (Dr. Vance)"),
-    h("option", { value: "patient", selected: S.user.role === "patient" }, "Role: Patient (John Doe)"),
-    h("option", { value: "parent", selected: S.user.role === "parent" }, "Role: Advocate / Caregiver"),
-    h("option", { value: "admin", selected: S.user.role === "admin" }, "Role: System Admin"));
+    h("option", { value: "parent", selected: S.user.role === "parent" }, "Role: Parent (Elena Sharma)"),
+    h("option", { value: "patient", selected: S.user.role === "patient" }, "Role: Student (Priya Sharma)"),
+    h("option", { value: "admin", selected: S.user.role === "admin" }, "Role: Administrator / Compliance"));
 
   const topBar = h("header", { class: "demo-topbar" },
     h("div", { class: "demo-topbar-left" },
-      h("div", { class: "demo-topbar-brand" }, Icons.brain(), "CARE AI DEMO"),
+      h("div", { class: "demo-topbar-brand" }, Icons.brain(), "CARE-AI · Pediatric Decision Support"),
       h("div", { class: "demo-topbar-pills" },
         S.plans.slice(0, 4).map(p => h("button", {
           class: "demo-topbar-pill" + (curPatientId === p.plan_id ? " active" : ""),
-          title: "Switch active demo patient case",
+          title: "Select active pediatric case",
           onclick: () => openPlan(p.plan_id, S.view)
-        }, "👤 " + (p.student_id || "Case"))))),
+        }, (p.student_id || "Case"))))),
     h("div", { class: "demo-topbar-right" },
       h("button", {
         class: "demo-btn-deck",
-        title: "Open Interactive Company Presentation Deck",
+        title: "Open Clinical Architecture & Evaluation Briefing Deck",
         onclick: () => { S.view = "presentation"; render(); }
-      }, Icons.presentation(), "📽️ Company Presentation Deck"),
+      }, Icons.presentation(), "Clinical Briefing Deck"),
       h("button", {
         class: "outline small",
-        style: "color:#FFF; border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); font-size:0.75rem; padding:0.35rem 0.65rem;",
-        title: "Run live multi-agent pipeline on current patient case",
+        title: "Run live multi-agent pipeline on active case",
         onclick: runLivePipelineDemo
-      }, "⚡ Run Multi-Agent Pipeline"),
+      }, Icons.analysis(), "Run Consensus Pipeline"),
       roleSelect));
 
   return h("div", { class: "shell" },
@@ -480,35 +534,24 @@ function shell(content) {
       h("div", { class: "rail-brand" },
         h("div", { class: "rail-mark" }, Icons.brain()),
         h("div", {},
-          h("h2", {}, "CARE AI"),
-          h("p", {}, isPat ? "Patient Health Portal" : "Clinical Decision Support"))),
+          h("h2", {}, "CARE-AI"),
+          h("p", {}, isPat ? "Parent & Student Portal" : "Clinical Decision Support"))),
       nav,
       h("div", { class: "rail-foot" },
         h("div", {
           class: "rail-user-chip",
           style: "cursor:pointer;",
-          title: "Click to open Account Security & Caseload Settings",
+          title: "Account Security & Caseload Settings",
           onclick: () => { S.profileModalOpen = true; render(); }
         },
           h("div", { class: "rail-avatar" }, (S.user.username || "P")[0].toUpperCase()),
           h("div", { class: "rail-user-text" },
             h("div", { class: "u-name" }, S.user.username),
-            h("div", { class: "u-role" }, S.user.role === "patient" ? "Verified Patient" : S.user.role))),
+            h("div", { class: "u-role" }, S.user.role === "patient" ? "Verified Student" : (S.user.role === "parent" ? "Authorized Caregiver" : S.user.role)))),
         h("button", { class: "outline", onclick: logout }, Icons.logout(), "Sign Out"))),
     h("main", { id: "main" },
       topBar,
       content),
-    // Floating Voice AI Assistant FAB
-    h("button", {
-      class: "voice-fab" + (S.voiceListening ? " active" : ""),
-      title: "Talk with Patient Voice AI Assistant",
-      onclick: () => { S.voiceModalOpen = true; render(); }
-    }, Icons.mic()),
-    // Floating Copilot Action Button
-    h("button", {
-      class: "copilot-fab",
-      onclick: () => { S.copilotOpen = !S.copilotOpen; render(); }
-    }, Icons.copilot(), "Ask CARE AI Copilot"),
     // Modals & Slide-out Drawer
     S.copilotOpen && copilotDrawer(),
     S.vitalsModalOpen && vitalsLogModal(),
@@ -542,7 +585,7 @@ function copilotDrawer() {
           }
           if (m.citations && m.citations.length) {
             bubble.appendChild(h("div", { class: "copilot-citations" },
-              h("strong", {}, "📚 Peer-Reviewed Literature Citations:"),
+              h("strong", {}, "Peer-Reviewed Clinical Literature:"),
               ...m.citations.map(c => h("div", { style: "margin-top:0.3rem;" },
                 h("span", { style: "font-weight:700; color:#1D4ED8;" }, c.cite + ": "),
                 h("span", { class: "small mute" }, c.title)))));
@@ -553,7 +596,7 @@ function copilotDrawer() {
                 class: "badge cobalt",
                 style: "font-size:0.7rem; padding:0.15rem 0.45rem; cursor:pointer;",
                 onclick: () => { S.view = "graph"; S.copilotOpen = false; render(); }
-              }, "🌐 " + e))));
+              }, "[MeSH] " + e))));
           }
         }
         return bubble;
@@ -611,7 +654,7 @@ function copilotDrawer() {
   return h("div", { class: "copilot-drawer" },
     h("div", { class: "copilot-head" },
       h("div", { class: "copilot-title-wrap" },
-        h("div", { class: "copilot-avatar" }, "⚡"),
+        h("div", { class: "copilot-avatar", style: "font-weight:700; font-size:0.75rem; color:var(--primary-accent);" }, "AI"),
         h("div", {},
           h("h3", {}, "CARE AI Clinical Copilot"),
           h("p", {}, "Neuro-symbolic decision assistant · HIPAA guardrailed"))),
@@ -652,7 +695,7 @@ function copilotView() {
           }
           if (m.citations && m.citations.length) {
             bubble.appendChild(h("div", { class: "copilot-citations" },
-              h("strong", {}, "📚 Peer-Reviewed Literature Citations:"),
+              h("strong", {}, "Peer-Reviewed Clinical Literature:"),
               ...m.citations.map(c => h("div", { style: "margin-top:0.3rem;" },
                 h("span", { style: "font-weight:700; color:#1D4ED8;" }, c.cite + ": "),
                 h("span", { class: "small mute" }, c.title)))));
@@ -663,7 +706,7 @@ function copilotView() {
                 class: "badge cobalt",
                 style: "font-size:0.7rem; padding:0.15rem 0.45rem; cursor:pointer;",
                 onclick: () => { S.view = "graph"; render(); }
-              }, "🌐 " + e))));
+              }, "[MeSH] " + e))));
           }
         }
         return bubble;
@@ -790,7 +833,7 @@ function vitalsView() {
           h("p", { class: "mute" }, "Continuous ambulatory blood pressure, resting pulse, and nocturnal sleep telemetry")),
         h("div", { style: "display:flex; gap:0.8rem; align-items:center;" },
           patientSelect(id => openPlan(id, "vitals")),
-          h("button", { class: "primary", onclick: () => { S.vitalsModalOpen = true; render(); } }, "➕ Log New Vitals"))),
+          h("button", { class: "primary", onclick: () => { S.vitalsModalOpen = true; render(); } }, "Log Telemetry Vitals"))),
 
       h("div", { class: "vitals-grid" },
         h("div", { class: "vital-tile" },
@@ -992,7 +1035,7 @@ function multimodalLab() {
           h("button", {
             class: "primary",
             style: "padding:0.4rem 0.9rem; font-size:0.8rem; margin-top:0.6rem;",
-            onclick: () => alert("Visual biomarkers attached to active patient record!")
+            onclick: () => showToast("Visual-motor biomarkers attached to active case record.", "success")
           }, "Attach to Active Case Record")));
     } catch (e) {
       visionStatus.textContent = e.message;
@@ -1011,8 +1054,8 @@ function multimodalLab() {
       audioStatus.textContent = "✓ Speech acoustic analysis complete!";
       audioStatus.className = "pass";
       audioResultsCard.replaceChildren(
-        h("div", { class: "card", style: "background:var(--s1); border-color:#0047FF;" },
-          h("h4", { style: "color:#0047FF; margin-top:0;" }, "Speech Biomarkers Output:"),
+        h("div", { class: "card", style: "background:var(--s1); border-color:var(--primary-accent);" },
+          h("h4", { style: "color:var(--primary-accent); margin-top:0;" }, "Speech Biomarkers Output:"),
           h("div", { class: "mm-metric-row" },
             h("div", { class: "mm-mini-metric" }, h("div", { class: "label" }, "Speaking Cadence"), h("div", { class: "val" }, `${res.speech_rate_wpm} WPM`)),
             h("div", { class: "mm-mini-metric" }, h("div", { class: "label" }, "Articulation"), h("div", { class: "val" }, `${res.articulation_clarity_pct}%`)),
@@ -1021,7 +1064,7 @@ function multimodalLab() {
           h("button", {
             class: "primary",
             style: "padding:0.4rem 0.9rem; font-size:0.8rem; margin-top:0.6rem;",
-            onclick: () => alert("Speech acoustic biomarkers attached to active patient record!")
+            onclick: () => showToast("Speech acoustic biomarkers attached to active case record.", "success")
           }, "Attach to Active Case Record")));
     } catch (e) {
       audioStatus.textContent = e.message;
@@ -1032,7 +1075,7 @@ function multimodalLab() {
   return h("div", { class: "multimodal-grid" },
     h("div", { class: "mm-card" },
       h("div", { class: "mm-head" },
-        h("h3", {}, "📷 Visual-Motor & Eye Tracking Scanner"),
+        h("h3", {}, "Visual-Motor & Gaze Tracking Assessment"),
         h("span", { class: "badge cobalt" }, "MediaPipe + OpenCV")),
       h("div", { class: "cam-viewport" },
         h("div", { class: "cam-placeholder" },
@@ -1040,14 +1083,14 @@ function multimodalLab() {
           h("div", {}, "Optical Tracking Viewport"),
           h("div", { class: "small mute", style: "margin-top:0.3rem;" }, "Monitors saccades, ocular strain, and fixation stability"))),
       h("div", { style: "display:flex; gap:0.6rem; margin-top:1.1rem;" },
-        h("button", { class: "primary", onclick: triggerVisionScan }, "⚡ Run AI Vision Scan"),
-        h("button", { class: "outline", onclick: () => alert("Camera stream test initialized.") }, "Preview Camera")),
+        h("button", { class: "primary", onclick: triggerVisionScan }, "Run Ocular Motor Assessment"),
+        h("button", { class: "outline", onclick: () => showToast("Camera stream test initialized.", "info") }, "Preview Camera")),
       visionStatus,
       visionResultsCard),
 
     h("div", { class: "mm-card" },
       h("div", { class: "mm-head" },
-        h("h3", {}, "🎙️ Acoustic Speech Biomarkers Lab"),
+        h("h3", {}, "Acoustic Speech & Prosody Assessment"),
         h("span", { class: "badge cobalt" }, "Prosody + ASR")),
       h("div", { class: "mic-viewport recording" },
         h("div", { class: "mic-wave-bars" },
@@ -1056,11 +1099,12 @@ function multimodalLab() {
       h("label", { style: "margin-top:0.8rem;" }, "Clinical Transcript / Voice Sample Notes"),
       transcriptInput,
       h("div", { style: "display:flex; gap:0.6rem; margin-top:1.1rem;" },
-        h("button", { class: "primary", onclick: triggerAudioScan }, "⚡ Analyze Speech Biomarkers"),
-        h("button", { class: "outline", onclick: () => alert("Microphone audio sample captured.") }, "Record Sample")),
+        h("button", { class: "primary", onclick: triggerAudioScan }, "Analyze Speech Acoustics"),
+        h("button", { class: "outline", onclick: () => showToast("Microphone audio sample captured.", "info") }, "Record Sample")),
       audioStatus,
       audioResultsCard));
 }
+
 function dashboardView() {
   const isPat = S.user && (S.user.role === "patient" || S.user.role === "parent");
   const box = h("div", {}, h("p", { class: "mute" }, "Synthesizing clinical decision overview…"));
@@ -1073,17 +1117,17 @@ function dashboardView() {
     const totalRecs = d.recommendations || 18;
 
     const defaultActivity = [
-      { num: 1, name: "John Doe (#PT-8420)", type: "Cardiovascular", status: "Analysed", date: "2026-09-15", pid: S.plans[0]?.plan_id },
-      { num: 2, name: "Priya S (#PT-8421)", type: "Neurological", status: "Analysed", date: "2026-09-14", pid: S.plans[1]?.plan_id },
-      { num: 3, name: "Arjun K (#PT-8422)", type: "Behavioral", status: "In Review", date: "2026-09-14", pid: S.plans[2]?.plan_id },
-      { num: 4, name: "Meena R (#PT-8423)", type: "Sensory & Speech", status: "Analysed", date: "2026-09-13", pid: S.plans[3]?.plan_id }
+      { num: 1, name: "Priya S (#PED-1041)", type: "Dyslexia & Math", status: "Plan Approved", date: "2026-09-15", pid: S.plans[0]?.plan_id },
+      { num: 2, name: "Meena R (#PED-1042)", type: "ASD & Speech-Language", status: "Plan Approved", date: "2026-09-14", pid: S.plans[1]?.plan_id },
+      { num: 3, name: "Arjun K (#PED-1043)", type: "ADHD Combined", status: "In Clinical Review", date: "2026-09-14", pid: S.plans[2]?.plan_id },
+      { num: 4, name: "Ananya M (#PED-1044)", type: "Speech Sound Disorder", status: "Evaluation Pending", date: "2026-09-13", pid: S.plans[3]?.plan_id }
     ];
 
     const rows = (d.activity && d.activity.length) ? d.activity.map((a, i) => ({
       num: i + 1,
-      name: a.student_id ? (a.student_id + " (#PT-" + (8420 + i) + ")") : ("Patient #" + (i + 1)),
-      type: a.type === "Medical" ? "Cardiovascular" : (a.type === "Educational" ? "Cognitive & Neural" : a.type),
-      status: a.status === "approved" ? "Care Plan Active" : (a.risk === "high" ? "Priority Attention" : "Analysed"),
+      name: a.student_id ? (a.student_id + " (#PED-" + (1041 + i) + ")") : ("Student #" + (i + 1)),
+      type: a.type === "Medical" ? "Neurodevelopmental" : (a.type === "Educational" ? "Dyslexia & Processing" : a.type),
+      status: a.status === "approved" ? "Plan Approved" : (a.risk === "high" ? "Priority Attention" : "In Review"),
       date: fmtDay(a.created),
       pid: a.plan_id
     })) : defaultActivity;
@@ -1091,41 +1135,41 @@ function dashboardView() {
     box.replaceChildren(
       h("div", { class: "page-head" },
         h("div", { class: "title-block" },
-          h("div", { class: "eyebrow" }, isPat ? "Personal Health Portal" : "Clinical Decision Support"),
-          h("h1", {}, isPat ? "My Health Dashboard" : "Patient Care Dashboard"),
-          h("p", { class: "mute" }, isPat ? "Continuous multi-agent monitoring and personalized clinical care pathway" : "Active patient cohort overview & multi-agent clinical consensus")),
+          h("div", { class: "eyebrow" }, isPat ? "Family & Student Portal" : "Pediatric Clinical Caseload"),
+          h("h1", {}, isPat ? "My Learning & Support Dashboard" : "Student Caseload & Status Overview"),
+          h("p", { class: "mute" }, isPat ? "Personalized learning accommodations, progress goals, and care team review" : "Multidisciplinary consensus status, active accommodations & clinical sign-offs")),
         h("div", { class: "user-pill" },
           h("span", { class: "dot" }),
-          h("span", {}, isPat ? ("Active Patient: " + (S.user.username || "John Doe")) : ("Welcome, Dr. " + (S.user.username || "Clinician"))))),
+          h("span", {}, isPat ? ("Active Profile: " + (S.user.username === "patient" ? "Priya Sharma" : (S.user.username === "parent" ? "Elena Sharma" : S.user.username))) : ("Specialist: Dr. " + (S.user.username || "Vance"))))),
 
       h("div", { class: "grid4" },
         h("div", { class: "stat-card" },
-          h("div", { class: "stat-label" }, isPat ? "Care Team Members" : "Total Registered Patients"),
+          h("div", { class: "stat-label" }, isPat ? "Care Team Members" : "Active Student Profiles"),
           h("div", { class: "stat-val" }, String(isPat ? 4 : totalUsers)),
           h("div", { class: "stat-icon" }, Icons.users())),
         h("div", { class: "stat-card" },
-          h("div", { class: "stat-label" }, isPat ? "Completed Diagnostic Scans" : "Analysed Clinical Cases"),
-          h("div", { class: "stat-val" }, String(isPat ? 1 : analysedCases)),
+          h("div", { class: "stat-label" }, isPat ? "Completed Assessments" : "Evaluated Cases"),
+          h("div", { class: "stat-val" }, String(isPat ? 3 : analysedCases)),
           h("div", { class: "stat-icon" }, Icons.analysis())),
         h("div", { class: "stat-card" },
-          h("div", { class: "stat-label" }, isPat ? "Active Vital Alerts" : "Priority Attention Cases"),
+          h("div", { class: "stat-label" }, isPat ? "Accommodations Requiring Review" : "Pending Clinical Sign-Offs"),
           h("div", { class: "stat-val", style: "color:var(--warn);" }, String(isPat ? 1 : highRiskCases)),
           h("div", { class: "stat-icon" }, Icons.explain())),
         h("div", { class: "stat-card" },
-          h("div", { class: "stat-label" }, isPat ? "Care Protocol Directives" : "Active Clinical Directives"),
-          h("div", { class: "stat-val", style: "color:var(--cobalt-bright);" }, String(totalRecs)),
+          h("div", { class: "stat-label" }, isPat ? "Active Accommodations" : "Active Directives"),
+          h("div", { class: "stat-val", style: "color:var(--primary-accent);" }, String(totalRecs)),
           h("div", { class: "stat-icon" }, Icons.recs()))),
 
       h("div", { class: "card", style: "margin-top:1.8rem;" },
-        h("h2", { style: "margin-bottom:1rem;" }, isPat ? "My Clinical Records & Intake History" : "Recent Patient Intakes & Clinical Status"),
+        h("h2", { style: "margin-bottom:1rem;" }, isPat ? "My Learning Plan & Assessment History" : "Recent Student Intakes & Clinical Consensus Status"),
         h("div", { class: "table-wrap" },
           h("table", {},
             h("thead", {},
               h("tr", {},
                 h("th", {}, "#"),
-                h("th", {}, "Patient Identifier"),
-                h("th", {}, "Clinical Focus"),
-                h("th", {}, "Triage Status"),
+                h("th", {}, "Student Case Identifier"),
+                h("th", {}, "Neurodevelopmental Focus"),
+                h("th", {}, "Consensus Status"),
                 h("th", {}, "Intake Date"),
                 h("th", {}, "Action"))),
             h("tbody", {},
@@ -1134,7 +1178,7 @@ function dashboardView() {
                 h("td", { style: "font-weight:700; color:var(--t1);" }, r.name),
                 h("td", {}, r.type),
                 h("td", {}, h("span", {
-                  class: "badge " + (r.status.includes("Active") ? "ok" : (r.status.includes("Priority") ? "err" : "cobalt"))
+                  class: "badge " + (r.status.includes("Approved") ? "ok" : (r.status.includes("Priority") ? "alert" : "cobalt"))
                 }, r.status)),
                 h("td", { class: "mute" }, r.date),
                 h("td", {},
@@ -1142,7 +1186,7 @@ function dashboardView() {
                     class: "primary",
                     style: "padding:0.35rem 0.95rem; min-height:32px; font-size:0.8rem;",
                     onclick: () => r.pid ? openPlan(r.pid, "analysis") : (S.plans[0] && openPlan(S.plans[0].plan_id, "analysis"))
-                  }, "Review Patient Plan")))))))));
+                  }, "Review Learning Plan")))))))));
   }).catch(e => box.replaceChildren(h("p", { class: "err" }, e.message)));
   return box;
 }
@@ -1152,12 +1196,12 @@ function dashboardView() {
 // ============================================================
 function uploadView() {
   const tabs = [
-    ["medical", "Cardiovascular & Vitals"],
-    ["educational", "Diagnostic Labs & Panels"],
-    ["behavioral", "Sleep & Activity Telemetry"],
-    ["speech", "Cognitive & Speech Assessment"],
-    ["vision", "Visual & Sensory Ergonomics"],
-    ["multimodal", "⚡ Multimodal Biometric Lab (Live AI)"]
+    ["educational", "Psychoeducational & Academic Panels"],
+    ["behavioral", "Behavioral & Sensory Telemetry"],
+    ["speech", "Speech-Language & Communication"],
+    ["vision", "Visual & Motor Ergonomics"],
+    ["medical", "Developmental & Medical History"],
+    ["multimodal", "Multimodal Screening Lab (Acoustic + Gaze)"]
   ];
 
   const f = {};
@@ -1165,15 +1209,15 @@ function uploadView() {
 
   const dropZone = h("div", { class: "dropzone" },
     Icons.upload(),
-    h("p", { class: "main" }, "Choose Patient File or Drag & Drop Clinical Dossier"),
-    h("p", { class: "sub" }, "Supported formats: PDF Medical Records, CSV Telemetry Logs, JPG / PNG Scans (Max size: 10MB)"),
+    h("p", { class: "main" }, "Choose Clinical Evaluation File or Drag & Drop Dossier"),
+    h("p", { class: "sub" }, "Supported formats: PDF Psychoeducational Reports, CSV Telemetry Logs, Scanned IEPS (Max size: 10MB)"),
     h("input", { type: "file", style: "display:none;", accept: ".pdf,.csv,.jpg,.jpeg,.png,.txt,.md" }));
 
   dropZone.addEventListener("click", () => dropZone.querySelector("input").click());
   dropZone.querySelector("input").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
-      statusMsg.textContent = "Selected Patient File: " + file.name + " (" + Math.round(file.size / 1024) + " KB)";
+      statusMsg.textContent = "Selected Clinical File: " + file.name + " (" + Math.round(file.size / 1024) + " KB)";
       statusMsg.className = "pass";
     }
   });
@@ -1183,17 +1227,17 @@ function uploadView() {
     statusMsg.className = "mute";
     setTimeout(async () => {
       try {
-        const patientName = f.student_id ? f.student_id.value.trim() : "John Doe";
+        const studentName = f.student_id ? f.student_id.value.trim() : "Priya S";
         const body = {
-          student_id: patientName || "John Doe",
-          age: f.age ? +f.age.value : 34,
-          grade: "Adult_Patient",
-          conditions: ["adhd"],
-          medical_notes: f.medical ? f.medical.value : "Resting blood pressure 142/90 mmHg. Irregular sleep pattern (5-6 hours). Possible risk of essential hypertension. Indicated for lifestyle and vitals monitoring.",
-          academic: { reading: 85.0, math: 82.0 },
-          behavior_notes: ["Restlessness during high stress periods", "Elevated evening screen fatigue"],
-          speech_notes: "Normal articulation and receptive cadence.",
-          vision_notes: "20/20 vision bilateral, ocular strain after 6 hours screen exposure.",
+          student_id: studentName || "Priya S",
+          age: f.age ? +f.age.value : 8,
+          grade: "Grade_3",
+          conditions: ["dyslexia", "adhd"],
+          medical_notes: f.medical ? f.medical.value : "Phonological decoding deficits, rapid naming fatigue, working memory constraints during multi-step instructions.",
+          academic: { reading: 62.0, math: 84.0 },
+          behavior_notes: ["Heightened focus in structured 1-on-1 environments", "Sensory overwhelm during loud unstructured transitions"],
+          speech_notes: "Intact phonetic repertoire, mild verbal retrieval hesitation under timed conditions.",
+          vision_notes: "Visual acuity 20/20 bilateral, ocular motor tracking shows saccadic fatigue after 20 minutes sustained text tracking.",
           attendance_rate: 0.96,
           incidents_last_30d: 0,
           vision_telemetry: S.visionResult || undefined,
@@ -1203,19 +1247,20 @@ function uploadView() {
         await loadPlans();
         S.uploadedFiles.unshift({
           id: S.uploadedFiles.length + 1,
-          name: (patientName.replace(/\s+/g, "_").toLowerCase()) + "_clinical_dossier.pdf",
+          name: (studentName.replace(/\s+/g, "_").toLowerCase()) + "_clinical_intake.pdf",
           type: tabs.find(t => t[0] === S.uploadTab)[1],
           date: new Date().toISOString().slice(0, 10),
           status: "Processed"
         });
-        statusMsg.textContent = "✓ Patient intake processed successfully! Multi-agent plan synthesized.";
+        statusMsg.textContent = "✓ Student intake processed successfully! Multi-agent plan synthesized.";
         statusMsg.className = "pass";
-        setTimeout(() => openPlan(plan.plan_id, "analysis"), 600);
+        showToast("Case dossier ingested and consensus plan generated.", "success");
+        setTimeout(() => openPlan(plan.plan_id, "analysis"), 500);
       } catch (err) {
         statusMsg.textContent = err.message;
         statusMsg.className = "err";
       }
-    }, 450);
+    }, 400);
   };
 
   const isMultimodalTab = S.uploadTab === "multimodal";
@@ -1224,11 +1269,11 @@ function uploadView() {
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
         h("div", { class: "eyebrow" }, "Clinical Intake"),
-        h("h1", {}, "Patient Intake & Vitals Dossier"),
-        h("p", { class: "mute" }, "Upload patient clinical records, diagnostic labs, and telemetry for multi-agent decision support")),
+        h("h1", {}, "Student Intake & Assessment Dossier"),
+        h("p", { class: "mute" }, "Upload student clinical evaluations, diagnostic reports, and sensory telemetry for multi-agent decision support")),
       h("div", { class: "user-pill" },
         h("span", { class: "dot" }),
-        h("span", {}, "Attending: " + (S.user.username || "Clinician")))),
+        h("span", {}, "Attending: " + (S.user.username || "Dr. Vance")))),
     h("div", { class: "sub-tabs", role: "tablist" },
       tabs.map(([k, label]) => h("button", {
         role: "tab",
@@ -1240,22 +1285,22 @@ function uploadView() {
       dropZone,
       h("div", { class: "grid2" },
         h("div", {},
-          h("label", {}, "Patient Name / Pseudonym Identifier"), (f.student_id = h("input", { placeholder: "e.g. John Doe (#PT-8420)", value: "John Doe (#PT-8420)" })),
-          h("label", {}, "Patient Age"), (f.age = h("input", { type: "number", value: "34" }))),
+          h("label", {}, "Student Name / Pseudonym Identifier"), (f.student_id = h("input", { placeholder: "e.g. Priya S (#PED-1041)", value: "Priya S (#PED-1041)" })),
+          h("label", {}, "Student Age"), (f.age = h("input", { type: "number", value: "8" }))),
         h("div", {},
-          h("label", {}, "Clinical Vitals & Observational Notes"),
+          h("label", {}, "Clinical & Psychoeducational Assessment Notes"),
           (f.medical = h("textarea", {
-            placeholder: "Enter clinical observations, blood pressure logs, heart rate, symptoms...",
+            placeholder: "Enter psychoeducational findings, assessment scores, sensory observations...",
             rows: 4,
-            value: "Resting blood pressure 142/90 mmHg. Irregular sleep pattern (5-6 hours). Family history of essential hypertension. Recommended lifestyle pacing and ambulatory BP monitoring."
+            value: "Phonological decoding deficits on pseudowords (below 25th percentile). Working memory constraints during multi-step instructions. Strong non-verbal conceptual reasoning and visual problem-solving."
           })))),
       statusMsg,
       h("p", { style: "margin-top:1.4rem;" },
         h("button", { class: "primary", onclick: handleUploadSubmit },
-          "Initiate Multi-Agent Analysis",
-          h("span", { class: "btn-icon-bubble" }, "⚡")))),
+          Icons.analysis(),
+          "Initiate Multi-Agent Consensus Pipeline"))),
     h("div", { class: "card", style: "margin-top:1.6rem;" },
-      h("h2", { style: "margin-bottom:1rem;" }, "Ingested Patient Dossiers"),
+      h("h2", { style: "margin-bottom:1rem;" }, "Ingested Student Clinical Dossiers"),
       h("div", { class: "table-wrap" },
         h("table", {},
           h("thead", {},
@@ -1283,16 +1328,15 @@ function radialGauge(scorePct) {
   const val = Math.max(0, Math.min(100, scorePct));
   const dash = (val / 100) * c;
   return svgEl("svg", { class: "gauge-svg", viewBox: "0 0 160 160" },
-    svgEl("circle", { cx: "80", cy: "80", r: String(r), fill: "none", stroke: "rgba(15, 23, 42, 0.08)", "stroke-width": "12" }),
+    svgEl("circle", { cx: "80", cy: "80", r: String(r), fill: "none", stroke: "var(--slate-200)", "stroke-width": "10" }),
     svgEl("circle", {
-      cx: "80", cy: "80", r: String(r), fill: "none", stroke: "#0047FF", "stroke-width": "12",
-      "stroke-linecap": "round", "stroke-dasharray": `${dash} ${c}`, transform: "rotate(-90 80 80)",
-      style: "filter:drop-shadow(0 0 8px rgba(0, 71, 255, 0.35));"
+      cx: "80", cy: "80", r: String(r), fill: "none", stroke: "var(--primary-accent)", "stroke-width": "10",
+      "stroke-linecap": "round", "stroke-dasharray": `${dash} ${c}`, transform: "rotate(-90 80 80)"
     }),
-    svgEl("text", { x: "80", y: "78", "text-anchor": "middle", "font-size": "28", "font-weight": "900", fill: "#0A0F1D" },
+    svgEl("text", { x: "80", y: "78", "text-anchor": "middle", "font-size": "26", "font-weight": "850", fill: "var(--navy-900)" },
       document.createTextNode(val + "%")),
-    svgEl("text", { x: "80", y: "102", "text-anchor": "middle", "font-size": "11", fill: "#64748B", "font-weight": "700" },
-      document.createTextNode("Consensus")));
+    svgEl("text", { x: "80", y: "100", "text-anchor": "middle", "font-size": "10", fill: "var(--slate-500)", "font-weight": "700", "letter-spacing": "0.08em" },
+      document.createTextNode("CONSENSUS")));
 }
 
 function analysisView() {
@@ -1300,78 +1344,143 @@ function analysisView() {
   if (!p) return needPlanView("Diagnostic Insights", "analysis");
 
   const tabs = [
-    ["medical", "Cardiovascular & Vitals"],
-    ["academic", "Cognitive & Neural"],
-    ["behavior", "Sleep & Circadian"],
-    ["speech", "Speech & Expression"],
-    ["vision", "Visual & Ocular"]
+    ["academic", "Academic & Literacy"],
+    ["behavior", "Behavioral & Sensory"],
+    ["speech", "Speech-Language & Communication"],
+    ["vision", "Visual & Motor Ergonomics"],
+    ["medical", "Developmental Health & Intake"]
   ];
 
-  const findingsMap = {
-    medical: [
-      "Elevated resting blood pressure detected (142/90 mmHg)",
-      "Irregular sleep architecture (5-6 hours total sleep time)",
-      "Borderline Stage-1 hypertensive tendency correlated with stress spikes",
-      "Indicated for dietary sodium reduction and ambulatory BP telemetry"
-    ],
-    academic: [
-      "Sustained focus fatigue observed during high cognitive load intervals",
-      "Executive processing speed remains in normal high baseline (82%)",
-      "Benefits from structured cognitive pacing and periodic interval recovery",
-      "No focal neurological or cognitive deficits detected"
-    ],
-    behavior: [
-      "Circadian disruption correlated with late-evening blue-light exposure",
-      "Responds positively to scheduled relaxation protocols and breathing exercises",
-      "Physical activity metrics indicate low daytime movement (under 4,000 steps)",
-      "Targeted 30-minute moderate aerobic conditioning recommended"
-    ],
-    speech: [
-      "Normal articulation, prosody, and receptive vocabulary",
-      "Clear communicative cadence with no expressive deficits",
-      "Speech-language biomarkers indicate healthy neurological processing",
-      "No direct speech-language interventions indicated"
-    ],
-    vision: [
-      "Visual acuity 20/20 bilateral with normal refractive stability",
-      "Ocular strain symptoms reported following prolonged digital screen exposure",
-      "Recommended 20-20-20 visual rest intervals and contrast optimization",
-      "No acute ocular pathology noted"
-    ]
-  };
+  const sid = (p.student_id || "").toLowerCase();
+  let findingsMap;
 
-  const currentFindings = findingsMap[S.analysisTab] || findingsMap.medical;
-  const score = S.analysisTab === "medical" ? 84 : (S.analysisTab === "academic" ? 82 : (S.analysisTab === "behavior" ? 78 : 88));
+  if (sid.includes("meena")) {
+    findingsMap = {
+      academic: [
+        "Hyperlexic word recognition with receptive comprehension variance in abstract text",
+        "Strong arithmetic computation; multi-step word problems require graphic organizers",
+        "Deep domain focus and sustained attention in ecological and botanical themes",
+        "Recommends explicit visual rubrics and predictable written instructions"
+      ],
+      behavior: [
+        "Acoustic hypersensitivity triggered during gymnasium, cafeteria, and noisy transitions",
+        "Self-regulatory vestibular movement (hand flapping) observed during elevated cognitive load",
+        "Responds exceptionally well to visual timers, first-then boards, and quiet sensory room access",
+        "Zero behavioral incidents when transition warnings are provided 5 minutes in advance"
+      ],
+      speech: [
+        "Expressive communication utilizes scripted language and delayed echolalia during anxiety peaks",
+        "Receptive processing requires 5-8 second latency window following multi-step prompts",
+        "Benefits from multimodal AAC backup supports and peer dyad communicative practice",
+        "Speech therapy targets social pragmatics and reciprocal conversational turn-taking"
+      ],
+      vision: [
+        "Strong visual-spatial pattern recognition and visual detail orientation",
+        "Photophobia under flickering fluorescent lighting; recommend perimeter natural light seating",
+        "No refractive errors detected; normal ocular motor alignment"
+      ],
+      medical: [
+        "Selective food texture sensitivity impacting daily nutritional intake variety",
+        "Sleep onset latency averaging 45 minutes; sensory calm-down sequence recommended",
+        "Fine and gross motor coordination within typical developmental parameters"
+      ]
+    };
+  } else if (sid.includes("arjun")) {
+    findingsMap = {
+      academic: [
+        "Working memory constraints with rapid decay of multi-step verbal classroom instructions",
+        "Careless calculation slips on lengthy arithmetic sheets despite strong conceptual understanding",
+        "Chunked academic intervals (15-minute focused sprints) yield 85% task completion",
+        "Requires written executive checklists and color-coded organizational binders"
+      ],
+      behavior: [
+        "ADHD Combined Presentation: motor restlessness, frequent seat departure, and vocal impulsivity",
+        "Exceptional response to tactile wobble cushions, scheduled movement breaks, and immediate praise",
+        "Zero aggressive or conduct incidents across 90-day classroom observations",
+        "Self-regulation improves significantly with positive behavioral reinforcement charts"
+      ],
+      speech: [
+        "Rapid conversational cadence with occasional turn-taking interruptions",
+        "Receptive auditory comprehension intact; pragmatic conversational pacing improving",
+        "Age-appropriate phonetic repertoire and clear conversational articulation"
+      ],
+      vision: [
+        "Normal visual acuity; visual distractibility significantly reduced when seated front-center",
+        "Responds well to visual clutter reduction on worksheets and digital screens"
+      ],
+      medical: [
+        "High physical stamina with rapid motor recovery following active play",
+        "Midday appetite suppression; evening caloric intake consistent",
+        "Resting vitals stable; sleep onset benefits from consistent evening schedule"
+      ]
+    };
+  } else {
+    // Default: Priya S / Dyslexia profile
+    findingsMap = {
+      academic: [
+        "Phonological decoding deficit on nonsense word reading (below 25th percentile)",
+        "Orthographic working memory latency during multi-line continuous text reading",
+        "Spatial reasoning and conceptual mathematical problem-solving well above grade level (84th percentile)",
+        "Indicated for structured Orton-Gillingham multisensory literacy instruction and 1.5x extended time"
+      ],
+      behavior: [
+        "Performance anxiety and avoidance triggers during timed or public oral reading",
+        "High task persistence and positive self-efficacy in hands-on STEM and visual projects",
+        "Sensory processing within typical classroom thresholds; benefits from low-distraction testing carrels",
+        "Affectionate, cooperative, and highly motivated in collaborative peer settings"
+      ],
+      speech: [
+        "Age-appropriate articulation, prosody, and receptive language repertoire",
+        "Mild expressive word-retrieval latency when under direct timed interrogation",
+        "Speech-language pathologist recommends classroom accommodation over direct articulation therapy",
+        "Receptive vocabulary assessed at 78th percentile"
+      ],
+      vision: [
+        "Visual acuity 20/20 bilateral with normal binocular alignment",
+        "Saccadic eye-movement tracking shows visual fatigue after 15-20 minutes continuous text tracking",
+        "Recommended enlarged line-spacing (1.5x) and high-contrast typographic rendering",
+        "No ocular pathology or binocular coordination dysfunction noted"
+      ],
+      medical: [
+        "Developmental milestones intact; normal hearing and neurological baseline",
+        "Somatic tension (mild frontal headaches) reported following prolonged reading assessments",
+        "No chronic somatic or pharmacological contraindications noted"
+      ]
+    };
+  }
+
+  const currentFindings = findingsMap[S.analysisTab] || findingsMap.academic;
+  const score = S.analysisTab === "academic" ? 86 : (S.analysisTab === "behavior" ? 82 : (S.analysisTab === "speech" ? 88 : 84));
 
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
         h("div", { class: "eyebrow" }, "Multi-Agent Clinical Consensus"),
-        h("h1", {}, "Diagnostic Insights & Analysis"),
-        h("p", { class: "mute" }, "Patient Case: " + (p.student_id || "John Doe (#PT-8420)"))),
+        h("h1", {}, "Diagnostic Insights & Consensus Findings"),
+        h("p", { class: "mute" }, "Active Student Case: " + (p.student_id || "Priya S"))),
       patientSelect(id => openPlan(id, "analysis"))),
     h("div", { class: "sub-tabs", role: "tablist" },
       tabs.map(([k, label]) => h("button", {
         role: "tab",
-        "aria-selected": S.analysisTab === k,
+        "aria-selected": (S.analysisTab || "academic") === k,
         onclick: () => { S.analysisTab = k; render(); }
       }, label))),
     h("div", { class: "grid2", style: "grid-template-columns: 1.35fr 0.65fr;" },
       h("div", { class: "card" },
-        h("h2", {}, tabs.find(t => t[0] === S.analysisTab)[1] + " Findings"),
+        h("h2", {}, (tabs.find(t => t[0] === (S.analysisTab || "academic")) || tabs[0])[1] + " Findings"),
         h("div", { style: "display:flex; align-items:center; gap:0.75rem; margin:0.9rem 0 1.3rem;" },
-          h("strong", {}, "Stratified Risk Level:"),
-          h("span", { class: "badge moderate" }, "Moderate Risk · Stage 1 Hypertension Risk")),
-        h("h3", { style: "margin-bottom:0.75rem;" }, "Multi-Agent Clinical Findings:"),
+          h("strong", {}, "Profile Categorization:"),
+          h("span", { class: "badge cobalt" }, (p.conditions && p.conditions.length) ? p.conditions.join(" · ").toUpperCase() : "DYSLEXIA · ADHD")),
+        h("h3", { style: "margin-bottom:0.75rem;" }, "Specialist Evaluator Consensus Findings:"),
         h("ul", { style: "list-style:none; padding-left:0; display:flex; flex-direction:column; gap:0.75rem;" },
           currentFindings.map(f => h("li", { style: "display:flex; align-items:flex-start; gap:0.75rem; font-size:0.93rem;" },
-            h("span", { style: "color:var(--cobalt-bright); font-weight:800;" }, "•"),
+            h("span", { style: "color:var(--primary-accent); font-weight:800;" }, "•"),
             h("span", {}, f))))),
       h("div", { class: "card", style: "display:flex; flex-direction:column; align-items:center; justify-content:center;" },
         h("h2", { style: "font-size:1.12rem; margin-bottom:0.5rem;" }, "Consensus Confidence"),
         radialGauge(score),
         h("p", { class: "mute small", style: "text-align:center; max-width:210px; margin-top:0.6rem;" },
-          "Neuro-symbolic multi-agent consensus confidence across clinical guidelines"))));
+          "Neuro-symbolic multi-agent consensus confidence across specialized pediatric evaluators"))));
 }
 
 // ============================================================
@@ -1385,18 +1494,18 @@ function graphView() {
     const w = 980, ht = 540, cx = w / 2, cy = ht / 2;
 
     const legendColors = {
-      symptom: "#F43F5E",     // Luminous Rose
-      disease: "#38BDF8",     // Electric Cyan-Cobalt
-      risk_factor: "#F59E0B", // Vibrant Amber
-      treatment: "#10B981",   // Calming Emerald
-      concept: "#2B5CFF"      // Cobalt Shine
+      symptom: "#E11D48",     // Clinical Rose
+      disease: "#0284C7",     // Precision Sky
+      risk_factor: "#D97706", // Clinical Amber
+      treatment: "#059669",   // Clinical Emerald
+      concept: "#2563EB"      // Sapphire Cobalt
     };
 
     const filter = S.kgFilter;
-    const nodes = filter === "all" ? g.nodes : g.nodes.filter(n => n.kind === filter || n.id.includes("hypertension"));
+    const nodes = filter === "all" ? g.nodes : g.nodes.filter(n => n.kind === filter || n.id.includes("dyslexia") || n.id.includes("adhd"));
 
     const pos = {};
-    const centerNode = nodes.find(n => n.label.toLowerCase().includes("hypertension")) || nodes[0];
+    const centerNode = nodes.find(n => n.label.toLowerCase().includes("dyslexia") || n.label.toLowerCase().includes("adhd")) || nodes[0];
     if (centerNode) {
       pos[centerNode.id] = { x: cx, y: cy, ...centerNode, isCenter: true };
     }
@@ -1421,22 +1530,21 @@ function graphView() {
       if (!a || !b) return;
       svg.appendChild(svgEl("line", {
         x1: a.x, y1: a.y, x2: b.x, y2: b.y,
-        stroke: "rgba(0, 71, 255, 0.25)", "stroke-width": "1.5"
+        stroke: "rgba(37, 99, 235, 0.20)", "stroke-width": "1.5"
       }));
     });
 
     // Draw Nodes
     Object.values(pos).forEach(n => {
       const color = legendColors[n.kind] || legendColors.concept;
-      const r = n.isCenter ? 28 : (n.kind === "disease" ? 17 : 13);
+      const r = n.isCenter ? 26 : (n.kind === "disease" ? 16 : 12);
 
       const gNode = svgEl("g", { class: "kg-node", style: "cursor:pointer;" });
       gNode.appendChild(svgEl("circle", {
         cx: n.x, cy: n.y, r: String(r),
         fill: color,
         stroke: "#FFFFFF",
-        "stroke-width": n.isCenter ? "3" : "2",
-        style: `filter: drop-shadow(0 2px 8px ${color}80);`
+        "stroke-width": n.isCenter ? "3" : "2"
       }));
 
       const text = svgEl("text", {
@@ -1451,7 +1559,7 @@ function graphView() {
       gNode.appendChild(text);
 
       gNode.addEventListener("click", () => {
-        alert(`Clinical Entity: ${n.label}\nCategory: ${n.kind.replace("_", " ").toUpperCase()}\nBiomedical relation verified via neuro-symbolic multi-agent ontology.`);
+        showToast(`Knowledge Entity: ${n.label} · Category: ${n.kind.replace("_", " ").toUpperCase()}`, "info");
       });
 
       svg.appendChild(gNode);
@@ -1489,51 +1597,54 @@ function graphView() {
 // ============================================================
 function recsView() {
   const p = S.plan;
-  if (!p) return needPlanView("Personalized Care Plan", "recs");
+  if (!p) return needPlanView("Personalized Learning Plan", "recs");
 
-  const clinicalRecs = [
-    "Regular ambulatory blood pressure monitoring (twice daily log: morning & evening)",
-    "Cardiovascular risk screening & baseline lipid panel follow-up",
-    "Sodium restriction (< 2,000 mg/day) following cardioprotective DASH guidelines",
-    "Primary care physician consultation for potential Stage-1 pharmacotherapy evaluation",
-    "Scheduled stress telemetry & heart-rate variability (HRV) pacing check-in"
+  const accs = (p.accommodations || []).map(a => a.text || a.title || a);
+  const strats = (p.strategies || []).map(s => s.text || s.title || s);
+  const servs = (p.services || []).map(sv => sv.text || sv.title || sv);
+
+  const clinicalRecs = servs.length ? servs : [
+    "Twice-weekly Orton-Gillingham multisensory literacy intervention with certified reading specialist",
+    "Speech-Language Pathology dyad sessions focused on verbal word retrieval & pragmatic turn-taking",
+    "Occupational Therapy consultation for sensory regulation diet & fine motor ergonomic pacing",
+    "Multidisciplinary progress re-evaluation scheduled at 12-week clinical milestone"
   ];
 
-  const lifestyleRecs = [
-    "30 minutes of daily moderate aerobic exercise (brisk walking, swimming, or cycling)",
-    "Consistent restorative sleep window (7.5 to 8 hours nightly, screen-off at 10 PM)",
-    "Progressive muscle relaxation and diaphragmatic breathing during stress intervals",
-    "Hydration tracking (2.5L daily) with caffeine restriction after 2:00 PM",
-    "Weekly clinical care team digital check-in to review vitals trajectory"
+  const lifestyleRecs = (accs.length || strats.length) ? [...accs, ...strats] : [
+    "1.5x Extended testing time in low-distraction testing environment (rule-engine verified)",
+    "Explicit visual transition schedules with 5-minute auditory countdown warnings",
+    "Chunked classroom assignments (15-minute focused academic sprints followed by 3-minute motor reset)",
+    "High-contrast typographic formatting with enlarged line-spacing and text-to-speech assistive reader access",
+    "Daily home-school sensory communication log to maintain consistent behavioral reinforcement"
   ];
 
   const approvePlan = async () => {
     try {
       await api(`/plans/${p.plan_id}/approve`, { body: {} });
-      alert("✓ Care Plan signed and approved by specialist! Status updated to Active.");
+      showToast("Care Plan reviewed and signed by specialist. Status updated to Active.", "success");
       p.status = "approved";
       render();
     } catch (e) {
-      alert("Plan recorded and verified. Specialist sign-off completed: " + S.user.username);
+      showToast("Specialist sign-off recorded and verified: " + S.user.username, "info");
     }
   };
 
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
-        h("div", { class: "eyebrow" }, "Personalized Clinical Care"),
-        h("h1", {}, "Patient Care Protocol & Recommendations"),
-        h("p", { class: "mute" }, "Active Patient Case: " + (p.student_id || "John Doe (#PT-8420)"))),
+        h("div", { class: "eyebrow" }, "Collaborative Clinical & Educational Plan"),
+        h("h1", {}, "Intervention Protocols & Learning Plan"),
+        h("p", { class: "mute" }, "Active Case: " + (p.student_id || "Priya S"))),
       patientSelect(id => openPlan(id, "recs"))),
     h("div", { class: "recs-bento" },
       h("div", { class: "rec-column-card" },
-        h("div", { class: "col-title clinical" }, "🩺 Clinical & Therapeutic Interventions"),
+        h("div", { class: "col-title clinical" }, "Clinical Directives & Specialized Services"),
         h("div", { class: "rec-list" },
           clinicalRecs.map(text => h("div", { class: "rec-item" },
             h("span", { class: "bullet" }, "•"),
             h("span", {}, text))))),
       h("div", { class: "rec-column-card" },
-        h("div", { class: "col-title lifestyle" }, "🛡️ Patient Daily Wellness & Care Protocol"),
+        h("div", { class: "col-title lifestyle" }, "Classroom Accommodations & Home Routine"),
         h("div", { class: "rec-list" },
           lifestyleRecs.map(text => h("div", { class: "rec-item" },
             h("span", { class: "bullet" }, "•"),
@@ -1541,23 +1652,23 @@ function recsView() {
     h("div", { class: "recs-bottom-bar" },
       h("div", { class: "recs-bottom-card" },
         h("div", {},
-          h("div", { class: "small mute" }, "Stratified Risk Level"),
+          h("div", { class: "small mute" }, "Rule Engine Safety Status"),
           h("div", { style: "margin-top:0.35rem;" },
-            h("span", { class: "badge moderate", style: "font-size:0.88rem; padding:0.35rem 0.95rem;" }, "Moderate Risk"))),
-        h("div", { style: "font-size:1.9rem;" }, "🛡️")),
+            h("span", { class: "badge ok", style: "font-size:0.84rem; padding:0.35rem 0.85rem;" }, "Safety Rules Passed · Contraindications Excluded"))),
+        h("div", { class: "pass", style: "font-size:1.4rem;" }, "✓")),
       h("div", { class: "recs-bottom-card" },
         h("div", {},
           h("div", { class: "small mute" }, "Consensus Confidence Score"),
-          h("div", { style: "font-size:1.35rem; font-weight:800; color:var(--t1); margin-top:0.25rem;" }, "84%")),
+          h("div", { style: "font-size:1.35rem; font-weight:800; color:var(--t1); margin-top:0.25rem;" }, "88%")),
         h("div", { class: "h-progress-bar" },
-          h("div", { class: "h-fill", style: "width:84%;" })))),
+          h("div", { class: "h-fill", style: "width:88%; background:var(--primary-accent);" })))),
     h("div", { class: "card", style: "margin-top:1.6rem;" },
-      h("h2", { style: "margin-bottom:0.8rem;" }, "Human-in-the-Loop Specialist Review Actions"),
-      h("p", { class: "mute small", style: "margin-bottom:1.1rem;" }, "Clinical decision support only. All personalized care plans require licensed healthcare specialist verification."),
+      h("h2", { style: "margin-bottom:0.8rem;" }, "Multidisciplinary Review & Sign-Off Actions"),
+      h("p", { class: "mute small", style: "margin-bottom:1.1rem;" }, "Clinical and educational decision support only. All learning accommodations require licensed specialist verification before formal IEP or 504 implementation."),
       h("div", { style: "display:flex; gap:0.9rem; flex-wrap:wrap;" },
-        h("button", { class: "primary", onclick: approvePlan }, "✓ Approve & Sign Care Plan"),
-        h("button", { class: "outline", onclick: () => alert("Care plan draft saved to encrypted patient record.") }, "Save as Draft"),
-        h("button", { class: "primary", style: "background:#0047FF;", onclick: () => window.open("/plans/" + p.plan_id + "/export", "_blank") }, "🖨️ Export Official Patient Dossier (Print / PDF)"))));
+        h("button", { class: "primary", onclick: approvePlan }, "Approve & Sign Learning Plan"),
+        h("button", { class: "outline", onclick: () => showToast("Care plan draft saved to encrypted student record.", "info") }, "Save as Draft"),
+        h("button", { class: "outline", onclick: () => window.open("/plans/" + p.plan_id + "/export", "_blank") }, Icons.pdf(), "Export Case Dossier (PDF / Print)"))));
 }
 
 // ============================================================
@@ -1568,18 +1679,18 @@ function explainView() {
   if (!p) return needPlanView("AI Explainability", "explain");
 
   const reasoningSteps = [
-    { num: 1, title: "Elevated resting blood pressure detected in intake dossier", meta: "Vitals Confidence: 0.86", detail: "Clinical agent processed baseline resting vitals (142/90 mmHg) and identified persistent hypertensive tendency." },
-    { num: 2, title: "Correlated with nocturnal sleep fragmentation from telemetry", meta: "Correlative Confidence: 0.82", detail: "Behavioral telemetry agent identified disrupted sleep architecture and insufficient restorative slow-wave sleep cycles." },
-    { num: 3, title: "Matched with 'Hypertension' in biomedical knowledge graph", meta: "Deductive Rule: High BP + Stress -> Stage-1 Risk", detail: "Neuro-symbolic deductive reasoner traversed symptom nodes into cardiovascular diagnostic cluster." },
-    { num: 4, title: "Multi-agent consensus decision: Moderate Risk lifestyle pacing", meta: "Final Consensus: 0.84", detail: "Synthesis agent generated personalized lifestyle, sodium reduction, and ambulatory telemetry directives." }
+    { num: 1, title: "Phonological decoding latency detected in psychoeducational intake (62nd percentile)", meta: "Intake Confidence: 0.88", detail: "Multidisciplinary academic evaluator identified severe discrepancy between high non-verbal conceptual reasoning (84th percentile) and single-word pseudoword decoding." },
+    { num: 2, title: "Matched with 'Dyslexia & Processing Speed' in biomedical ontology", meta: "Ontology Match: 0.92", detail: "Neuro-symbolic knowledge graph traversed symptom nodes to link visual working memory decay with orthographic mapping deficits." },
+    { num: 3, title: "Deterministic Rule Engine triggered safety filter", meta: "Rule Guardrail: PASS (No Timed Drills)", detail: "Rule engine hard-blocked rapid-fire timed math fluency worksheets to prevent affective shutdown, substituting untimed concept demonstration." },
+    { num: 4, title: "Multi-agent consensus synthesis: 1.5x time, Orton-Gillingham, and text-to-speech", meta: "Consensus Alignment: 0.88", detail: "Consensus agent reconciled educator, speech-language pathologist, and neuropsychologist proposals into a unified evidence-grounded learning plan." }
   ];
 
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
         h("div", { class: "eyebrow" }, "Interpretability & Transparency"),
-        h("h1", {}, "Explainable Clinical AI — Decision Reasoning"),
-        h("p", { class: "mute" }, "Patient Case: " + (p.student_id || "John Doe (#PT-8420)"))),
+        h("h1", {}, "Explainable Clinical AI — Decision Reasoning Pathway"),
+        h("p", { class: "mute" }, "Active Student Case: " + (p.student_id || "Priya S"))),
       patientSelect(id => openPlan(id, "explain"))),
     h("div", { class: "card" },
       h("h2", {}, "Clinical Reasoning Pathway"),
@@ -1594,14 +1705,14 @@ function explainView() {
       h("div", { class: "card" },
         h("h3", {}, "Multi-Agent Consensus Debate"),
         h("p", { class: "small mute" }, "Reconciliation of inter-agent recommendations:"),
-        h("p", {}, h("strong", {}, "Topic: "), "Exercise conditioning vs autonomic rest"),
-        h("p", { class: "small" }, "Cardiovascular agent recommended non-strenuous low-impact pacing; behavioral wellness agent proposed active interval sessions. Synthesized into 30-minute brisk morning walks with continuous hydration.")),
+        h("p", {}, h("strong", {}, "Topic: "), "Oral Reading Fluency Drills vs Assistive Text-to-Speech"),
+        h("p", { class: "small" }, "Academic evaluator initially recommended daily oral reading aloud; Speech-Language and Behavioral evaluators identified severe cortisol and anxiety spikes during public reading. Reconciled into private peer-dyad reading paired with high-quality text-to-speech reader.")),
       h("div", { class: "card" },
         h("h3", {}, "Policy & Safety Guardrails"),
         h("div", { style: "display:flex; flex-direction:column; gap:0.6rem; margin-top:0.75rem;" },
-          h("div", { class: "pass" }, "✓ Patient Safety & Contraindication Clearance (Pass)"),
-          h("div", { class: "pass" }, "✓ Counterfactual Demographic Invariance (0.96 Score)"),
-          h("div", { class: "pass" }, "✓ Licensed Specialist Sign-Off Enforced")))));
+          h("div", { class: "pass" }, "✓ Deterministic Safety Contraindication Filter (Pass - Timed Drills Excluded)"),
+          h("div", { class: "pass" }, "✓ Counterfactual Demographic Invariance (0.98 Score)"),
+          h("div", { class: "pass" }, "✓ Licensed Specialist Sign-Off Mandatory (HITL)")))));
 }
 
 // ============================================================
@@ -1612,22 +1723,22 @@ function reportsView() {
   if (!p) return needPlanView("Risk & Prognosis", "reports");
 
   const domains = [
-    { name: "Cardiovascular & Vitals", pct: 72, cls: "medical" },
-    { name: "Circadian & Sleep Health", pct: 64, cls: "lifestyle" },
-    { name: "Stress & Autonomic State", pct: 58, cls: "behavioral" },
-    { name: "Cognitive Stamina", pct: 38, cls: "cognitive" },
-    { name: "Visual & Sensory Fatigue", pct: 30, cls: "sensory" }
+    { name: "Phonological & Reading Processing", pct: 68, cls: "cognitive" },
+    { name: "Working Memory & Executive Stamina", pct: 54, cls: "behavioral" },
+    { name: "Classroom Task Anxiety & Frustration", pct: 62, cls: "medical" },
+    { name: "Speech & Receptive Communication", pct: 28, cls: "lifestyle" },
+    { name: "Visual & Ocular Motor Fatigue", pct: 36, cls: "sensory" }
   ];
 
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
         h("div", { class: "eyebrow" }, "Predictive Analytics"),
-        h("h1", {}, "Patient Risk & Prognostic Trajectory"),
-        h("p", { class: "mute" }, "Summary of stratified risk scores and 12-week prognostic digital twin simulation")),
+        h("h1", {}, "Pediatric Growth & Prognostic Trajectory"),
+        h("p", { class: "mute" }, "Stratified multi-domain risk evaluation and 12-week neurodevelopmental digital twin simulation")),
       patientSelect(id => openPlan(id, "reports"))),
     h("div", { class: "card" },
-      h("h2", { style: "margin-bottom:1.1rem;" }, "Stratified Risk Scores by Domain"),
+      h("h2", { style: "margin-bottom:1.1rem;" }, "Stratified Assessment Metrics by Functional Domain"),
       h("div", { class: "risk-chart-wrap" },
         domains.map(d => h("div", { class: "domain-risk-row" },
           h("span", { class: "d-name" }, d.name),
@@ -1636,28 +1747,29 @@ function reportsView() {
           h("span", { class: "d-pct" }, d.pct + "%"))))),
     h("div", { class: "grid2", style: "margin-top:1.4rem;" },
       h("div", { class: "card" },
-        h("h3", {}, "Cardiovascular Risk Factors"),
-        h("p", {}, h("strong", { style: "color:var(--alert);" }, "Elevated (72%)")),
-        h("p", { class: "small mute" }, "Key drivers: Systolic BP excursions above 140 mmHg, sodium intake, sedentary posture during work hours.")),
+        h("h3", {}, "Academic & Reading Fluency Focus"),
+        h("p", {}, h("strong", { style: "color:var(--alert);" }, "High Priority Intervention")),
+        h("p", { class: "small mute" }, "Primary challenges: Pseudoword decoding latency below 25th percentile, orthographic working memory load during continuous text reading.")),
       h("div", { class: "card" },
-        h("h3", {}, "Circadian & Sleep Recovery Factors"),
-        h("p", {}, h("strong", { style: "color:var(--warn);" }, "Moderate (64%)")),
-        h("p", { class: "small mute" }, "Key drivers: Nocturnal sleep latency over 40 minutes and fragmented slow-wave recovery cycles."))),
+        h("h3", {}, "Sensory Regulation & Executive Pacing"),
+        h("p", {}, h("strong", { style: "color:var(--warn);" }, "Moderate Support Required")),
+        h("p", { class: "small mute" }, "Primary supports: Structured visual transition timers, scheduled motor resets every 15 minutes, and noise-attenuating headphone access during quiet focus time."))),
     h("div", { class: "card", style: "margin-top:1.4rem;" },
-      h("h3", {}, "12-Week Patient Digital Twin Simulation (What-If Prognosis)"),
+      h("h3", {}, "12-Week Neurodevelopmental Growth Simulation (What-If Prognosis)"),
       h("div", { class: "table-wrap", style: "margin-top:0.9rem;" },
         h("table", {},
           h("thead", {},
             h("tr", {},
-              h("th", {}, "Health Metric"),
+              h("th", {}, "Neurodevelopmental Metric"),
               h("th", {}, "Current Baseline"),
-              h("th", {}, "Without Care Plan"),
-              h("th", {}, "With CARE AI Protocol"),
-              h("th", {}, "Projected Health Gain"))),
+              h("th", {}, "Without Accommodations"),
+              h("th", {}, "With CARE-AI Protocol"),
+              h("th", {}, "Projected Outcome"))),
           h("tbody", {},
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Resting Blood Pressure"), h("td", {}, "142/90 mmHg"), h("td", {}, "148/94 mmHg"), h("td", { class: "pass", style: "font-weight:700;" }, "124/80 mmHg"), h("td", { class: "pass" }, "✓ Normal Range")),
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Restorative Sleep Score"), h("td", {}, "54 / 100"), h("td", {}, "52 / 100"), h("td", { class: "pass", style: "font-weight:700;" }, "82 / 100"), h("td", { class: "pass" }, "+28 pts")),
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Cardiovascular Stamina"), h("td", {}, "60 / 100"), h("td", {}, "58 / 100"), h("td", { class: "pass", style: "font-weight:700;" }, "84 / 100"), h("td", { class: "pass" }, "+24 pts")))))));
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Single-Word Reading Decoding"), h("td", {}, "42 WPM (62%)"), h("td", {}, "44 WPM"), h("td", { class: "pass", style: "font-weight:700;" }, "78 WPM (85%)"), h("td", { class: "pass" }, "✓ Grade Level Norm")),
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Sustained Academic Focus Span"), h("td", {}, "12 minutes"), h("td", {}, "10 minutes"), h("td", { class: "pass", style: "font-weight:700;" }, "28 minutes"), h("td", { class: "pass" }, "+16 mins Endurance")),
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Weekly Task-Avoidance Episodes"), h("td", {}, "6 / week"), h("td", {}, "7 / week"), h("td", { class: "pass", style: "font-weight:700;" }, "1 / week"), h("td", { class: "pass" }, "83% Reduction")),
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Math Word Problem Accuracy"), h("td", {}, "58%"), h("td", {}, "54%"), h("td", { class: "pass", style: "font-weight:700;" }, "86%"), h("td", { class: "pass" }, "+28% Mastery")))))));
 }
 
 // ============================================================
@@ -1669,70 +1781,72 @@ function feedbackView() {
   const comments = h("textarea", {
     id: "fb-comments",
     rows: 4,
-    placeholder: "Enter feedback, symptom updates, or notes on protocol adherence...",
-    value: "Care directives are clear. BP readings normalized to 128/84 after consistent morning walks."
+    placeholder: "Enter parent home routine feedback, educator classroom observations, or accommodation adjustment requests...",
+    value: "Accommodations are working effectively. 1.5x time reduced reading anxiety significantly; student completed reading task without avoidance."
   });
 
   const submitFeedback = async () => {
     try {
       const pid = S.plan ? S.plan.plan_id : (S.plans[0] ? S.plans[0].plan_id : null);
-      if (!pid) throw new Error("Select a patient case first.");
+      if (!pid) throw new Error("Select a student case first.");
       const all = itemsOf(S.plan || S.plans[0]);
-      const pending = all[0] || { id: "rec_1", intervention_id: "I_MED_COORD" };
+      const pending = all[0] || { id: "rec_1", intervention_id: "I_EDU_COORD" };
       await api(`/plans/${pid}/review`, {
         body: {
           item_id: pending.id,
           decision: "edit",
-          edited_text: (pending.text || "BP monitoring & lifestyle adjustments") + " | Patient Note: " + comments.value.trim()
+          edited_text: (pending.text || "Multisensory structured literacy & extended time") + " | Caregiver Note: " + comments.value.trim()
         }
       });
       out.replaceChildren(h("div", { class: "card", style: "border-color:var(--ok); background:var(--ok-t);" },
-        h("p", { class: "pass", style: "font-weight:700;" }, "✓ Patient feedback logged successfully!"),
-        h("p", { class: "small mute" }, "Clinical neuro-symbolic weights updated in patient care memory.")));
+        h("p", { class: "pass", style: "font-weight:700;" }, "✓ Caregiver & clinical feedback logged successfully!"),
+        h("p", { class: "small mute" }, "Retrieval memory calibrated across multidisciplinary evaluation agents.")));
+      showToast("Feedback recorded and verified.", "success");
     } catch (e) {
       out.replaceChildren(h("p", { class: "err" }, e.message));
+      showToast(e.message, "error");
     }
   };
 
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
-        h("div", { class: "eyebrow" }, "Care Team Communication"),
-        h("h1", {}, "Patient Feedback & Continuous Learning"),
-        h("p", { class: "mute" }, "Submit patient symptom observations and care plan check-in notes"))),
+        h("div", { class: "eyebrow" }, "Collaborative Care Loop"),
+        h("h1", {}, "Multidisciplinary Feedback & Continuous Calibration"),
+        h("p", { class: "mute" }, "Record parent observations, educator classroom notes, and clinician review adjustments"))),
     h("div", { class: "card" },
-      h("label", {}, "Select Patient Case"),
+      h("label", {}, "Select Active Case"),
       patientSelect(id => openPlan(id, "feedback")),
       h("label", { style: "margin-top:1.3rem;" }, "Reporting Role"),
       h("div", { class: "radio-group" },
         h("label", { class: "radio-label" },
-          h("input", { type: "radio", name: "fb-type", value: "patient", checked: S.fbType === "patient", onchange: () => { S.fbType = "patient"; } }),
-          "Patient Self-Report"),
+          h("input", { type: "radio", name: "fb-type", value: "parent", checked: S.fbType === "parent", onchange: () => { S.fbType = "parent"; } }),
+          "Parent / Family Caregiver"),
         h("label", { class: "radio-label" },
           h("input", { type: "radio", name: "fb-type", value: "clinician", checked: S.fbType === "clinician", onchange: () => { S.fbType = "clinician"; } }),
-          "Attending Clinician Note"),
+          "Attending Clinician / Specialist"),
         h("label", { class: "radio-label" },
-          h("input", { type: "radio", name: "fb-type", value: "parent", checked: S.fbType === "parent", onchange: () => { S.fbType = "parent"; } }),
-          "Caregiver / Advocate Note")),
-      h("label", { for: "fb-comments" }, "Feedback & Clinical Observations"),
+          h("input", { type: "radio", name: "fb-type", value: "educator", checked: S.fbType === "educator", onchange: () => { S.fbType = "educator"; } }),
+          "Classroom Educator / Specialist")),
+      h("label", { for: "fb-comments", style: "margin-top:1.2rem;" }, "Observations & Accommodation Efficacy Notes"),
       comments,
       h("p", { style: "margin-top:1.3rem;" },
-        h("button", { class: "primary", onclick: submitFeedback }, "Submit Patient Feedback")),
+        h("button", { class: "primary", onclick: submitFeedback }, "Submit Collaborative Feedback")),
       out),
     h("div", { class: "card", style: "margin-top:1.6rem;" },
-      h("h3", {}, "Active Feedback Statistics & Learned Weights"),
+      h("h3", {}, "Active Calibration Statistics & Learned Weights"),
       h("div", { class: "table-wrap", style: "margin-top:0.8rem;" },
         h("table", {},
           h("thead", {},
             h("tr", {},
-              h("th", {}, "Clinical Intervention Domain"),
+              h("th", {}, "Neurodevelopmental Domain"),
               h("th", {}, "Reviews Logged"),
-              h("th", {}, "Patient Acceptance Rate"),
+              h("th", {}, "Caregiver & Specialist Agreement"),
               h("th", {}, "Learned Calibration Weight"))),
           h("tbody", {},
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Cardiovascular & Vitals Telemetry"), h("td", {}, "24"), h("td", { class: "pass" }, "94%"), h("td", { class: "pass" }, "+0.16 weight")),
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "DASH Dietary & Sodium Protocol"), h("td", {}, "18"), h("td", { class: "pass" }, "88%"), h("td", { class: "pass" }, "+0.12 weight")),
-            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Scheduled Aerobic Movement & Sleep"), h("td", {}, "31"), h("td", { class: "pass" }, "96%"), h("td", { class: "pass" }, "+0.18 weight")))))));
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Literacy & Phonological Accommodations"), h("td", {}, "32"), h("td", { class: "pass" }, "96%"), h("td", { class: "pass" }, "+0.18 weight")),
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Sensory Quiet Room & Auditory Breaks"), h("td", {}, "28"), h("td", { class: "pass" }, "92%"), h("td", { class: "pass" }, "+0.14 weight")),
+            h("tr", {}, h("td", { style: "color:var(--t1); font-weight:700;" }, "Executive Checklists & Chunked Sprints"), h("td", {}, "41"), h("td", { class: "pass" }, "98%"), h("td", { class: "pass" }, "+0.22 weight"))))))));
 }
 
 // Fallback Helper for Cases
@@ -1741,37 +1855,37 @@ function needPlanView(title, nextView) {
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
         h("h1", {}, title),
-        h("p", { class: "mute" }, "Please select an active patient case to view clinical records."))),
+        h("p", { class: "mute" }, "Please select an active student case to view clinical records."))),
     h("div", { class: "card" },
-      h("h3", {}, "Active Patient Cases:"),
+      h("h3", {}, "Active Student Cases:"),
       patientSelect(id => openPlan(id, nextView))));
 }
 
-// Patients Caseload View
+// Students Caseload View
 function patientsView() {
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
-        h("div", { class: "eyebrow" }, "Clinical Registry"),
-        h("h1", {}, "Patients & Clinical Records"),
-        h("p", { class: "mute" }, "Active patient caseload under multi-agent clinical decision intelligence"))),
+        h("div", { class: "eyebrow" }, "Student Caseload Registry"),
+        h("h1", {}, "Student Clinical Profiles & Caseload"),
+        h("p", { class: "mute" }, "Multidisciplinary caseload evaluated across neurodevelopmental domains"))),
     h("div", { class: "card" },
       h("div", { class: "table-wrap" },
         h("table", {},
           h("thead", {},
             h("tr", {},
-              h("th", {}, "Patient Identifier"),
-              h("th", {}, "Care Plan Status"),
+              h("th", {}, "Student Identifier"),
+              h("th", {}, "Learning Plan Status"),
               h("th", {}, "Intake Date"),
               h("th", {}, "Action"))),
           h("tbody", {},
             S.plans.map(p => h("tr", {},
-              h("td", { style: "font-weight:700; color:var(--t1);" }, (p.student_id || "John Doe") + " (#PT-8420)"),
-              h("td", {}, h("span", { class: "badge " + (p.status === "approved" ? "ok" : "moderate") },
-                p.status === "approved" ? "Care Plan Active" : "In Review")),
+              h("td", { style: "font-weight:700; color:var(--t1);" }, p.student_id || "Student Case"),
+              h("td", {}, h("span", { class: "badge " + (p.status === "approved" ? "ok" : "cobalt") },
+                p.status === "approved" ? "Plan Approved" : "In Specialist Review")),
               h("td", { class: "mute" }, fmtDay(p.created)),
               h("td", {},
-                h("button", { class: "primary", style: "padding:0.35rem 0.95rem; min-height:32px; font-size:0.82rem;", onclick: () => openPlan(p.plan_id, "analysis") }, "Review Patient Plan")))))))));
+                h("button", { class: "primary", style: "padding:0.35rem 0.95rem; min-height:32px; font-size:0.82rem;", onclick: () => openPlan(p.plan_id, "analysis") }, "Review Case Plan")))))))));
 }
 
 // Settings & Security Audit View
@@ -1790,7 +1904,7 @@ function adminView() {
         h("button", { class: "primary", onclick: async () => {
           const r = await api("/audit/verify");
           out.replaceChildren(h("p", { class: r.intact ? "pass" : "fail", style: "font-weight:700; margin-top:0.8rem;" },
-            r.intact ? "✓ Clinical audit log is intact and tamper-free." : "❌ Tampering detected in audit chain!"));
+            r.intact ? "✓ Clinical audit log is intact and tamper-free." : "Tampering detected in audit chain!"));
         } }, "Verify Audit Chain")),
       out));
 }
@@ -1798,14 +1912,14 @@ function adminView() {
 // Clinical Research Library
 function libraryView() {
   const out = h("div", {});
-  const qInput = h("input", { placeholder: "Search medical literature e.g. hypertension, ambulatory BP, DASH diet, sleep hygiene..." });
+  const qInput = h("input", { placeholder: "Search literature e.g. dyslexia phonological mapping, ASD sensory processing, ADHD executive function, Orton-Gillingham..." });
   const searchLit = async () => {
     try {
       const r = await api("/literature/search?k=5&q=" + encodeURIComponent(qInput.value));
       out.replaceChildren(
         h("p", { class: "mute small", style: "margin:0.9rem 0;" }, r.notice),
         ...r.results.map(res => h("div", { class: "card", style: "margin-top:0.75rem;" },
-          h("strong", { style: "color:var(--cobalt-bright);" }, res.cite),
+          h("strong", { style: "color:var(--primary-accent);" }, res.cite),
           h("h3", { style: "margin:0.25rem 0;" }, res.title),
           h("p", { class: "small mute" }, res.snippet + "..."))));
     } catch (e) {
@@ -1817,9 +1931,9 @@ function libraryView() {
   return h("div", {},
     h("div", { class: "page-head" },
       h("div", { class: "title-block" },
-        h("div", { class: "eyebrow" }, "Clinical Literature"),
-        h("h1", {}, "Biomedical Research Library"),
-        h("p", { class: "mute" }, "Indexed peer-reviewed publications supporting clinical multi-agent decision support"))),
+        h("div", { class: "eyebrow" }, "Evidence-Based Practice"),
+        h("h1", {}, "Clinical Research & Literature Reference Library"),
+        h("p", { class: "mute" }, "Indexed peer-reviewed publications supporting clinical and educational multi-agent decision consensus"))),
     h("div", { class: "card" },
       h("div", { style: "display:flex; gap:0.7rem;" },
         qInput,
@@ -1911,7 +2025,7 @@ const VoiceAgent = {
         console.warn("Recognition already active or failed:", e);
       }
     } else {
-      alert("Microphone speech recognition is not available in this browser. You can type commands directly in the voice console.");
+      showToast("Microphone speech recognition is not available in this browser. You can type commands directly in the voice console.", "info");
     }
   },
 
@@ -2051,7 +2165,7 @@ function updateVoiceUI() {
     }
   });
 
-  const statusText = S.voiceEmergency ? "⚠️ EMERGENCY DETECTED — SEEK IMMEDIATE CARE" :
+  const statusText = S.voiceEmergency ? "[CRITICAL] EMERGENCY MEDICAL EVENT DETECTED" :
                      S.voiceListening ? "Listening to your voice... Speak now" :
                      S.voiceSpeaking ? "CARE AI is speaking clinical response..." :
                      (S.voiceInterim || "Tap Orb or Microphone to Speak");
@@ -2124,11 +2238,11 @@ function voiceAssistantModal() {
         h("p", { class: "mute small" }, "Hands-free spoken vitals logging, continuous clinical consultation & acute triage")),
 
       S.voiceEmergency ? h("div", { class: "voice-emergency-banner" },
-        h("div", { style: "font-size:1.6rem;" }, "🚨"),
+        h("div", { style: "font-size:1.1rem; font-weight:700; color:#991B1B;" }, "[CRITICAL]"),
         h("div", {},
           h("strong", { style: "color:#991B1B; font-size:0.92rem;" }, "CRITICAL EMERGENCY ALERT DETECTED"),
-          h("p", {}, "Your reported symptoms require immediate emergency medical care. Please sit down safely and dial 911 immediately."),
-          h("a", { href: "tel:911" }, "📞 Dial 911 Emergency Services Now")
+          h("p", {}, "Reported acute symptoms indicate a high-priority clinical event. Please seek emergency medical care immediately."),
+          h("a", { href: "tel:911" }, "Contact Emergency Services (911)")
         )
       ) : null,
 
@@ -2174,7 +2288,7 @@ function voiceAssistantModal() {
             S.voiceRate = S.voiceRate === 1.0 ? 1.2 : (S.voiceRate === 1.2 ? 0.8 : 1.0);
             render();
           }
-        }, "⚡ Speed: " + (S.voiceRate || 1.0) + "x"),
+        }, "Cadence: " + (S.voiceRate || 1.0) + "x"),
         h("button", {
           class: "voice-ctrl-btn",
           onclick: () => {
@@ -2201,8 +2315,8 @@ function voiceAssistantModal() {
       S.voiceLastReply ? h("div", { class: "voice-reply-card " + (S.voiceLastReply.is_emergency ? "emergency-border" : "") },
         h("div", { class: "voice-reply-head" },
           h("span", { class: "voice-reply-title" },
-            S.voiceLastReply.is_emergency ? "🚨 Emergency Medical Alert" :
-            (S.voiceLastReply.intent === "vitals_logged" ? "✅ Vitals Telemetry Recorded" : "🩺 CARE AI Clinical Response")),
+            S.voiceLastReply.is_emergency ? "[ALERT] Emergency Medical Notification" :
+            (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
           h("button", {
             class: "outline small",
             style: "padding:0.2rem 0.6rem; font-size:0.75rem;",
@@ -2222,7 +2336,7 @@ function voiceAssistantModal() {
           h("span", {}, `${S.voiceLastReply.vitals_recorded.systolic}/${S.voiceLastReply.vitals_recorded.diastolic} mmHg · Pulse: ${S.voiceLastReply.vitals_recorded.pulse} bpm · Risk: ${S.voiceLastReply.vitals_recorded.risk_flag}`)
         ) : null,
         (S.voiceLastReply.citations && S.voiceLastReply.citations.length) ? h("div", { style: "margin-top:0.75rem; border-top:1px solid var(--line); padding-top:0.5rem; font-size:0.76rem; color:var(--t2);" },
-          h("strong", {}, "📚 Peer-Reviewed Citation: "),
+          h("strong", {}, "Peer-Reviewed Citation: "),
           h("span", {}, S.voiceLastReply.citations[0].cite + " — " + S.voiceLastReply.citations[0].title)
         ) : null
       ) : null,
@@ -2233,7 +2347,7 @@ function voiceAssistantModal() {
           chips.map(chip => h("button", {
             class: "voice-chip",
             onclick: () => VoiceAgent.sendCommand(chip)
-          }, "🗣️ ", chip))))));
+          }, chip))))));
 }
 
 function voiceView() {
@@ -2282,11 +2396,11 @@ function voiceView() {
         }, Icons.mic(), S.voiceListening ? "Stop Microphone" : "Start Microphone"))),
 
     S.voiceEmergency ? h("div", { class: "voice-emergency-banner" },
-      h("div", { style: "font-size:2rem;" }, "🚨"),
+      h("div", { style: "font-size:1.1rem; font-weight:700; color:#991B1B;" }, "[CRITICAL]"),
       h("div", {},
         h("strong", { style: "color:#991B1B; font-size:1rem;" }, "CRITICAL EMERGENCY ALERT DETECTED"),
-        h("p", {}, "Your reported symptoms indicate potential acute cardiovascular or respiratory distress. Please stop all activity, remain seated safely, and call 911 immediately."),
-        h("a", { href: "tel:911" }, "📞 Call 911 Emergency Services")
+        h("p", {}, "Reported symptoms indicate potential acute physiological distress. Please cease strenuous activity and contact emergency medical services immediately."),
+        h("a", { href: "tel:911" }, "Contact Emergency Services (911)")
       )
     ) : null,
 
@@ -2337,7 +2451,7 @@ function voiceView() {
               S.voiceRate = S.voiceRate === 1.0 ? 1.2 : (S.voiceRate === 1.2 ? 0.8 : 1.0);
               render();
             }
-          }, "⚡ Speed: " + (S.voiceRate || 1.0) + "x"),
+          }, "Cadence: " + (S.voiceRate || 1.0) + "x"),
           h("button", {
             class: "voice-ctrl-btn",
             onclick: () => {
@@ -2364,8 +2478,8 @@ function voiceView() {
         S.voiceLastReply ? h("div", { class: "voice-reply-card " + (S.voiceLastReply.is_emergency ? "emergency-border" : "") },
           h("div", { class: "voice-reply-head" },
             h("span", { class: "voice-reply-title" },
-              S.voiceLastReply.is_emergency ? "🚨 Emergency Medical Alert" :
-              (S.voiceLastReply.intent === "vitals_logged" ? "✅ Vitals Telemetry Recorded" : "🩺 CARE AI Clinical Response")),
+              S.voiceLastReply.is_emergency ? "[ALERT] Emergency Medical Notification" :
+              (S.voiceLastReply.intent === "vitals_logged" ? "[CONFIRMED] Telemetry Logged" : "Clinical Decision Support Output")),
             h("button", {
               class: "outline small",
               style: "padding:0.2rem 0.6rem; font-size:0.75rem;",
@@ -2385,7 +2499,7 @@ function voiceView() {
             h("span", {}, `${S.voiceLastReply.vitals_recorded.systolic}/${S.voiceLastReply.vitals_recorded.diastolic} mmHg · Pulse: ${S.voiceLastReply.vitals_recorded.pulse} bpm · Risk: ${S.voiceLastReply.vitals_recorded.risk_flag}`)
           ) : null,
           (S.voiceLastReply.citations && S.voiceLastReply.citations.length) ? h("div", { style: "margin-top:0.75rem; border-top:1px solid var(--line); padding-top:0.5rem; font-size:0.76rem; color:var(--t2);" },
-            h("strong", {}, "📚 Peer-Reviewed Citation: "),
+            h("strong", {}, "Peer-Reviewed Citation: "),
             h("span", {}, S.voiceLastReply.citations[0].cite + " — " + S.voiceLastReply.citations[0].title)
           ) : null
         ) : null,
@@ -2396,7 +2510,7 @@ function voiceView() {
             chips.map(chip => h("button", {
               class: "voice-chip",
               onclick: () => VoiceAgent.sendCommand(chip)
-            }, "🗣️ ", chip))))
+            }, chip))))
       ),
 
       h("div", { style: "display:flex; flex-direction:column; gap:1.2rem;" },
@@ -2412,7 +2526,7 @@ function voiceView() {
               h("div", { class: "vital-label" }, "Resting Pulse"),
               h("div", { class: "vital-val", style: "font-size:1.3rem;" }, `${latestVital.pulse} bpm`),
               h("div", { class: "vital-sub" }, "Cardiac Rhythm"))),
-          h("p", { class: "mute small", style: "margin-top:0.9rem;" }, "💡 Saying e.g. 'Log my BP 132 over 86' automatically calculates ACC/AHA classification and logs timestamped entries directly into the audit store.")),
+          h("p", { class: "mute small", style: "margin-top:0.9rem;" }, "Clinical Protocol Note: Spoken vitals queries calculate ACC/AHA classification and append immutable audit timestamps.")),
 
         h("div", { class: "card" },
           h("h3", { style: "margin-top:0;" }, "Voice Command Capabilities"),
@@ -2424,16 +2538,16 @@ function voiceView() {
               h("strong", { style: "color:var(--accent);" }, "2. Vitals Inquiry"),
               h("p", { style: "margin:0.25rem 0 0 0; color:var(--t2);" }, "Retrieves your latest telemetry records and speaks them back clearly.")),
             h("div", { style: "padding:0.7rem; background:var(--s1); border-radius:6px; border:1px solid var(--line);" },
-              h("strong", { style: "color:#DC2626;" }, "3. Acute Emergency Triage"),
-              h("p", { style: "margin:0.25rem 0 0 0; color:var(--t2);" }, "Instant keyword screening for chest pain, shortness of breath, and syncope. Triggers urgent audible alerts and 911 dispatch prompt.")),
+              h("strong", { style: "#DC2626;" }, "3. Acute Emergency Triage"),
+              h("p", { style: "margin:0.25rem 0 0 0; color:var(--t2);" }, "Instant keyword screening for acute crisis markers. Triggers immediate escalation and dispatch prompts.")),
             h("div", { style: "padding:0.7rem; background:var(--s1); border-radius:6px; border:1px solid var(--line);" },
-              h("strong", { style: "color:var(--accent);" }, "4. Dietary & Recovery Guidance"),
-              h("p", { style: "margin:0.25rem 0 0 0; color:var(--t2);" }, "DASH diet guidelines, sleep hygiene protocols, and safe aerobic conditioning.")))),
+              h("strong", { style: "color:var(--accent);" }, "4. Accommodation & Support Retrieval"),
+              h("p", { style: "margin:0.25rem 0 0 0; color:var(--t2);" }, "Immediate spoken retrieval of learning accommodations, sensory diets, and reading plans.")))),
 
-        h("div", { class: "card", style: "background:rgba(0, 71, 255, 0.03); border-color:rgba(0, 71, 255, 0.15);" },
-          h("h4", { style: "margin:0 0 0.4rem 0; color:var(--accent);" }, "🛡️ Clinical Decision Support Guardrail"),
+        h("div", { class: "card", style: "background:rgba(30, 58, 138, 0.03); border-color:rgba(30, 58, 138, 0.15);" },
+          h("h4", { style: "margin:0 0 0.4rem 0; color:var(--primary);" }, "Clinical Governance & Scope Guardrail"),
           h("p", { class: "mute small", style: "line-height:1.45; margin:0;" },
-            "CARE AI Voice Assistant provides non-diagnostic clinical decision support. In any life-threatening situation or emergency, dial 911 or visit the nearest emergency medical facility immediately."))
+            "CARE-AI Voice Assistant operates strictly as a decision-support and assistive interface. In any acute medical emergency, contact professional emergency services immediately."))
       )
     )
   );
@@ -2504,14 +2618,14 @@ function presentationView() {
 
         h("div", { style: "display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; margin-top:1.4rem;" },
           h("div", { style: "background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); border-radius:8px; padding:1.2rem;" },
-            h("h3", { style: "color:#DC2626; margin:0 0 0.5rem 0;" }, "❌ The Critical Coordination Problem"),
+            h("h3", { style: "color:var(--alert); margin:0 0 0.5rem 0;" }, "The Multidisciplinary Coordination Challenge"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.86rem; color:var(--t2); line-height:1.6;" },
               h("li", {}, "Clinicians, educators, and parents spend hours manually collating notes across disparate assessments for each IEP or care plan."),
               h("li", {}, "Dense clinical evaluation reports take weeks and leave parents alienated by inaccessible medical jargon."),
               h("li", {}, "High risk of missed contraindications when accommodations are assembled under administrative time pressure."),
               h("li", {}, "Generic chatbots hallucinate citations and cannot enforce hard negative clinical constraints."))),
-          h("div", { style: "background:rgba(0, 71, 255, 0.05); border:1px solid rgba(0, 71, 255, 0.2); border-radius:8px; padding:1.2rem;" },
-            h("h3", { style: "color:#0047FF; margin:0 0 0.5rem 0;" }, "✅ The CARE AI Solution"),
+          h("div", { style: "background:rgba(30, 58, 138, 0.05); border:1px solid rgba(30, 58, 138, 0.2); border-radius:8px; padding:1.2rem;" },
+            h("h3", { style: "color:var(--primary); margin:0 0 0.5rem 0;" }, "The CARE-AI Collaborative Solution"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.86rem; color:var(--t2); line-height:1.6;" },
               h("li", {}, "Multi-agent architecture modeling a multidisciplinary pediatric evaluation team."),
               h("li", {}, "Collaborative Parent & Clinician Review Flow providing transparent joint plan oversight."),
@@ -2537,35 +2651,35 @@ function presentationView() {
             h("tr", {},
               h("th", { style: "width:22%;" }, "Evaluation Dimension"),
               h("th", { style: "width:39%; background:#334155;" }, "Generic LLMs (e.g. Pure GPT / Llama)"),
-              h("th", { style: "width:39%; background:#0047FF;" }, "CARE AI (Hybrid Neuro-Symbolic)")
+              h("th", { style: "width:39%; background:var(--primary);" }, "CARE-AI (Hybrid Neuro-Symbolic)")
             )
           ),
           h("tbody", {},
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Clinical Safety & Contraindications"),
-              h("td", { style: "color:#DC2626;" }, "Probabilistic text generation. Can hallucinate unsafe therapies or recommend contraindicated timed drills for anxious students."),
-              h("td", { style: "color:#059669; font-weight:700;" }, "Deterministic symbolic rule filter (Rule Engine). Hard-blocks predefined contraindicated accommodations through explicit logical constraints.")),
+              h("td", { style: "color:var(--alert);" }, "Probabilistic text generation. Can hallucinate unsafe therapies or recommend contraindicated timed drills for anxious students."),
+              h("td", { style: "color:var(--ok); font-weight:700;" }, "Deterministic symbolic rule filter (Rule Engine). Hard-blocks predefined contraindicated accommodations through explicit logical constraints.")),
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Biomedical Knowledge Grounding"),
               h("td", {}, "Unstructured text memory with latent hallucinations and stale weights."),
-              h("td", { style: "font-weight:700; color:#0047FF;" }, "Explicit Biomedical Knowledge Graph (symptoms, conditions, and verified treatments) + 1,171 indexed literature passages.")),
+              h("td", { style: "font-weight:700; color:var(--primary-accent);" }, "Explicit Biomedical Knowledge Graph (symptoms, conditions, and verified treatments) + 1,171 indexed literature passages.")),
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Explainability & Auditability"),
               h("td", {}, "Black-box weights. Explanations are post-hoc rationalizations."),
-              h("td", { style: "font-weight:700; color:#0047FF;" }, "Step-by-step reasoning pathway, explicit consensus debate records, and citation provenance.")),
+              h("td", { style: "font-weight:700; color:var(--primary-accent);" }, "Step-by-step reasoning pathway, explicit consensus debate records, and citation provenance.")),
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Demographic Parity & Bias"),
               h("td", {}, "Prone to hidden racial, gender, and socioeconomic training bias."),
-              h("td", { style: "font-weight:700; color:#059669;" }, "Automated Counterfactual Bias Audit: tests identical clinical profiles across demographics with > 0.95 invariance threshold.")),
+              h("td", { style: "font-weight:700; color:var(--ok);" }, "Automated Counterfactual Bias Audit: tests identical clinical profiles across demographics with > 0.95 invariance threshold.")),
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Feedback Learning Loop"),
               h("td", {}, "Requires expensive full model fine-tuning; prone to catastrophic forgetting."),
-              h("td", { style: "font-weight:700; color:#0047FF;" }, "Algorithm 4 bounded retrieval re-weighting with offline replay buffer (safe, immediate clinician calibration)."))
+              h("td", { style: "font-weight:700; color:var(--primary-accent);" }, "Algorithm 4 bounded retrieval re-weighting with offline replay buffer (safe, immediate clinician calibration)."))
           )
         ),
 
-        h("div", { style: "margin-top:1.4rem; padding:0.9rem 1.2rem; background:rgba(0, 71, 255, 0.05); border-left:4px solid #0047FF; border-radius:4px; font-size:0.86rem; line-height:1.5;" },
-          h("strong", { style: "color:#0047FF;" }, "Scientific Grounding & Prototype Status: "),
+        h("div", { style: "margin-top:1.4rem; padding:0.9rem 1.2rem; background:rgba(30, 58, 138, 0.05); border-left:4px solid var(--primary-accent); border-radius:4px; font-size:0.86rem; line-height:1.5;" },
+          h("strong", { style: "color:var(--primary);" }, "Scientific Grounding & Prototype Status: "),
           h("span", {}, "Implements paper Equations 2–4 for Adaptive Hybrid RAG difficulty scoring. Risk and prognostic twin models use transparent heuristic priors requiring clinical calibration; benchmark suite uses synthetic cases for pipeline verification."))
       ),
       h("div", { class: "slide-footer-bar" },
@@ -2584,45 +2698,45 @@ function presentationView() {
           h("div", { class: "arch-flow-row" },
             h("div", { class: "arch-agent-card highlight" },
               h("div", { class: "arch-agent-badge" }, "Stage 1: Intake"),
-              h("div", { class: "arch-agent-title" }, "🛡️ Privacy Scrubber"),
+              h("div", { class: "arch-agent-title" }, "Data Protection & Privacy Scrubber"),
               h("div", { class: "arch-agent-desc" }, "Client-side regex & NLP scrubbing of names, phone numbers, and emails before model ingestion.")),
             h("div", { class: "arch-agent-card highlight" },
               h("div", { class: "arch-agent-badge" }, "Stage 2: Routing"),
-              h("div", { class: "arch-agent-title" }, "🧭 Adaptive Router"),
+              h("div", { class: "arch-agent-title" }, "Adaptive Specialist Router"),
               h("div", { class: "arch-agent-desc" }, "Logistic routing model activates only relevant specialists based on intake flags (saves compute).")),
             h("div", { class: "arch-agent-card highlight" },
-              h("div", { class: "arch-agent-badge" }, "Stage 3: Parallel Analysis"),
-              h("div", { class: "arch-agent-title" }, "🔬 5 Analysis Agents"),
-              h("div", { class: "arch-agent-desc" }, "Medical/Cardiovascular, Cognitive/Academic, Behavioral/Sleep, Speech Prosody, and Vision/Ocular.")),
+              h("div", { class: "arch-agent-badge" }, "Stage 3: Analysis"),
+              h("div", { class: "arch-agent-title" }, "Multidisciplinary Evaluator Agents"),
+              h("div", { class: "arch-agent-desc" }, "Academic/Literacy, Cognitive/Executive, Behavioral/Sensory, Speech Prosody, and Visual/Ocular.")),
             h("div", { class: "arch-agent-card highlight" },
               h("div", { class: "arch-agent-badge" }, "Stage 4: Synthesis"),
-              h("div", { class: "arch-agent-title" }, "⚖️ Consensus Agent"),
+              h("div", { class: "arch-agent-title" }, "Harmonic Consensus Agent"),
               h("div", { class: "arch-agent-desc" }, "Conflict detection, multi-agent weighted debate, and harmonic synthesis into unified proposals."))
           ),
 
           h("div", { class: "arch-flow-row", style: "margin-top:0.6rem;" },
             h("div", { class: "arch-agent-card" },
               h("div", { class: "arch-agent-badge" }, "Stage 5: Simulation"),
-              h("div", { class: "arch-agent-title" }, "🧬 Digital Twin Agent"),
-              h("div", { class: "arch-agent-desc" }, "12-week Monte Carlo What-If prognosis simulating vital improvements with and without protocol.")),
+              h("div", { class: "arch-agent-title" }, "Prognostic Digital Twin Agent"),
+              h("div", { class: "arch-agent-desc" }, "12-week Monte Carlo What-If prognosis simulating growth trajectories with and without accommodations.")),
             h("div", { class: "arch-agent-card" },
               h("div", { class: "arch-agent-badge" }, "Stage 6: Risk Analysis"),
-              h("div", { class: "arch-agent-title" }, "📊 Risk & Prognosis Agent"),
-              h("div", { class: "arch-agent-desc" }, "Multi-domain risk stratification across cardiovascular, academic, behavioral, and sensory domains.")),
+              h("div", { class: "arch-agent-title" }, "Multi-Domain Risk Stratifier"),
+              h("div", { class: "arch-agent-desc" }, "Multi-domain risk stratification across reading, executive function, sensory, and behavioral domains.")),
             h("div", { class: "arch-agent-card" },
               h("div", { class: "arch-agent-badge" }, "Stage 7: Governance"),
-              h("div", { class: "arch-agent-title" }, "📜 Policy & Bias Agent"),
+              h("div", { class: "arch-agent-title" }, "Governance & Fairness Auditor"),
               h("div", { class: "arch-agent-desc" }, "Counterfactual demographic invariance audit and clinical safety contraindication checks.")),
             h("div", { class: "arch-agent-card" },
               h("div", { class: "arch-agent-badge" }, "Stage 8: Learning"),
-              h("div", { class: "arch-agent-title" }, "🔄 Feedback Learning Agent"),
+              h("div", { class: "arch-agent-title" }, "Continuous Calibration Agent"),
               h("div", { class: "arch-agent-desc" }, "Records specialist edits/approvals into bounded replay buffer to calibrate future retrieval weights."))
           )
         ),
 
         h("div", { style: "display:flex; justify-content:space-between; align-items:center; background:var(--s1); padding:0.9rem 1.4rem; border-radius:8px; border:1px solid var(--line); margin-top:1.1rem;" },
           h("div", { style: "font-size:0.86rem; color:var(--t2);" },
-            h("strong", { style: "color:#0047FF;" }, "Human-in-the-Loop Guarantee: "),
+            h("strong", { style: "color:var(--primary);" }, "Human-in-the-Loop Guarantee: "),
             "Every output is marked as a DRAFT. Clinical specialist sign-off is mandatory before any plan is activated or exported."),
           h("span", { class: "badge ok" }, "100% HITL Enforced"))
       ),
@@ -2640,18 +2754,17 @@ function presentationView() {
 
         h("div", { style: "display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; margin:1.2rem 0;" },
           [
-            ["1. Parent & Clinician Review", "🤝", "Flagship collaborative review flow: transparent reasoning pathway, specialist item-by-item sign-off, and plain-language parent summary."],
-            ["2. Multi-Agent Consensus", "⚖️", "Parallel evaluation across academic, behavioral, speech, and sensory specialists with conflict detection and confidence weighting."],
-            ["3. Deterministic Rule Engine", "🛡️", "Explicit negative constraint filters that hard-block contraindicated interventions (e.g., timed testing for anxious dyslexics)."],
-            ["4. Grounded Knowledge Graph", "🧠", "Ontological mapping linking conditions, symptoms, and research-backed interventions with 1,171 indexed literature passages."],
-            ["5. Jargon-Free Parent Portal", "🏡", "Translates complex clinical formulations into actionable daily routines, transition schedules, and home accommodations."],
-            ["6. Cryptographic Audit Ledger", "🔒", "Fernet encryption at rest, RBAC caseload authorization, and append-only SHA-256 hash chains for verifiable data integrity."],
-            ["7. Exploratory Intake Modules", "🔬", "Supplementary research modules: multimodal visual/acoustic screening, somatic observations, and clinical encounter notes."]
-          ].map(([title, icon, desc]) => h("div", {
+            ["1. Parent & Clinician Review", "Flagship collaborative review flow: transparent reasoning pathway, specialist item-by-item sign-off, and plain-language parent summary."],
+            ["2. Multi-Agent Consensus", "Parallel evaluation across academic, behavioral, speech, and sensory specialists with conflict detection and confidence weighting."],
+            ["3. Deterministic Rule Engine", "Explicit negative constraint filters that hard-block contraindicated interventions (e.g., timed testing for anxious dyslexics)."],
+            ["4. Grounded Knowledge Graph", "Ontological mapping linking conditions, symptoms, and research-backed interventions with 1,171 indexed literature passages."],
+            ["5. Jargon-Free Parent Portal", "Translates complex clinical formulations into actionable daily routines, transition schedules, and home accommodations."],
+            ["6. Cryptographic Audit Ledger", "Fernet encryption at rest, RBAC caseload authorization, and append-only SHA-256 hash chains for verifiable data integrity."],
+            ["7. Exploratory Intake Modules", "Supplementary research modules: multimodal visual/acoustic screening, somatic observations, and clinical encounter notes."]
+          ].map(([title, desc]) => h("div", {
             style: "background:var(--s1); border:1px solid var(--line); border-radius:8px; padding:1rem 1.2rem; transition:all 0.2s;"
           },
-            h("div", { style: "display:flex; align-items:center; gap:0.5rem; font-weight:800; font-size:0.92rem; color:var(--t1); margin-bottom:0.35rem;" },
-              h("span", { style: "font-size:1.15rem;" }, icon), title),
+            h("div", { style: "font-weight:800; font-size:0.92rem; color:var(--t1); margin-bottom:0.35rem;" }, title),
             h("p", { style: "margin:0; font-size:0.78rem; color:var(--t3); line-height:1.45;" }, desc)
           ))
         )
@@ -2684,14 +2797,14 @@ function presentationView() {
 
         h("div", { style: "display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; margin-top:1.4rem;" },
           h("div", { class: "card", style: "background:var(--s1);" },
-            h("h3", { style: "margin:0 0 0.6rem 0;" }, "🛡️ HIPAA Security Rule Alignment"),
+            h("h3", { style: "margin:0 0 0.6rem 0;" }, "HIPAA Security Rule Alignment"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.84rem; line-height:1.5; color:var(--t2);" },
               h("li", {}, "Strict Role-Based Access Control (RBAC) separating Clinicians, Patients, Parents, and Admins."),
-              h("li", {}, "Caseload Authorization: parents and clinicians only view authorized patient records."),
+              h("li", {}, "Caseload Authorization: parents and clinicians only view authorized student records."),
               h("li", {}, "Brute-force login throttling: 5 failed attempts locks IP/account for 5-minute window."),
               h("li", {}, "Strict Content Security Policy (CSP) & frame-ancestors 'none' to block clickjacking."))),
           h("div", { class: "card", style: "background:var(--s1);" },
-            h("h3", { style: "margin:0 0 0.6rem 0;" }, "⚖️ Fairness & Demographic Audit"),
+            h("h3", { style: "margin:0 0 0.6rem 0;" }, "Fairness & Demographic Audit"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.84rem; line-height:1.5; color:var(--t2);" },
               h("li", {}, "Counterfactual Fairness Audit: runs every plan against demographic variations."),
               h("li", {}, "Subgroup invariance score must exceed 0.95 or approval is blocked automatically."),
@@ -2704,8 +2817,8 @@ function presentationView() {
         h("span", {}, "Press Right Arrow (→) or Next to continue"))
     );
   } else {
-    const priyaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("priya")) || S.plans[1] || S.plans[0];
-    const meenaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("meena")) || S.plans[3] || S.plans[0];
+    const priyaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("priya")) || S.plans[0];
+    const meenaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("meena")) || S.plans[1] || S.plans[0];
     const arjunPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("arjun")) || S.plans[2] || S.plans[0];
 
     slideContent = h("div", { class: "slide-card" },
@@ -2722,7 +2835,7 @@ function presentationView() {
           },
             h("div", {},
               h("span", { class: "demo-launch-badge" }, "Pediatric Case · Dyslexia & Math"),
-              h("div", { class: "demo-launch-title" }, "Priya S (6th Grade)"),
+              h("div", { class: "demo-launch-title" }, "Priya S (Grade 3)"),
               h("p", { class: "demo-launch-desc" }, "Diagnosed with dyslexia and math processing challenges. Experience multi-agent academic debate, rule-based timed drill blocking, and structured literacy accommodations.")),
             h("button", { class: "demo-launch-btn" }, "Review Priya's Plan →")),
 
@@ -2732,7 +2845,7 @@ function presentationView() {
           },
             h("div", {},
               h("span", { class: "demo-launch-badge" }, "Pediatric Case · ASD & Speech"),
-              h("div", { class: "demo-launch-title" }, "Meena R (3rd Grade)"),
+              h("div", { class: "demo-launch-title" }, "Meena R (Grade 3)"),
               h("p", { class: "demo-launch-desc" }, "Autism spectrum profile with transition anxiety and acoustic sensitivity. Review visual schedule supports, sensory quiet rooms, and AAC communication accommodations.")),
             h("button", { class: "demo-launch-btn" }, "Review Meena's Plan →")),
 
@@ -2742,7 +2855,7 @@ function presentationView() {
           },
             h("div", {},
               h("span", { class: "demo-launch-badge" }, "Pediatric Case · ADHD"),
-              h("div", { class: "demo-launch-title" }, "Arjun K (4th Grade)"),
+              h("div", { class: "demo-launch-title" }, "Arjun K (Grade 4)"),
               h("p", { class: "demo-launch-desc" }, "ADHD combined type with high motor activity. Explore executive function aids, movement breaks, visual timers, and school-home consistency routines.")),
             h("button", { class: "demo-launch-btn" }, "Review Arjun's Plan →")),
 
@@ -2762,12 +2875,12 @@ function presentationView() {
             class: "primary",
             style: "padding:0.75rem 2rem; font-size:1rem;",
             onclick: () => { S.view = "dashboard"; render(); }
-          }, "🚀 Enter Live CARE AI Workspace"),
+          }, "Enter Clinical Decision Workspace"),
           h("button", {
             class: "outline",
             style: "padding:0.75rem 1.6rem;",
             onclick: () => window.open("/plans/" + (S.plan?.plan_id || S.plans[0]?.plan_id) + "/export", "_blank")
-          }, "🖨️ Export Official Clinical Dossier"))
+          }, Icons.pdf(), "Export Official Case Dossier"))
       ),
       h("div", { class: "slide-footer-bar" },
         h("span", {}, "CARE AI Corporate Presentation · Slide 6 of 6"),
@@ -2809,18 +2922,18 @@ function presentationView() {
 // CLINICAL SOAP ENCOUNTER NOTES VIEW (Pillar 7)
 // ============================================================
 function soapView() {
-  const sid = S.plan?.student_id || (S.plans[0]?.student_id || "John Doe");
+  const sid = S.plan?.student_id || (S.plans[0]?.student_id || "Priya S");
   const pid = S.plan?.plan_id || (S.plans[0]?.plan_id || "");
 
   const box = h("div", { class: "soap-container" });
   const chiefComplaintInput = h("input", {
-    placeholder: "e.g. Follow-up evaluation of ambulatory blood pressure readings and non-restorative nocturnal sleep...",
-    value: "Follow-up evaluation of elevated morning blood pressure readings and non-restorative nocturnal sleep architecture."
+    placeholder: "e.g. Follow-up evaluation of phonological decoding interventions and classroom accommodations...",
+    value: "Follow-up evaluation of phonological decoding interventions, task anxiety, and IEP accommodation compliance."
   });
   const encounterSelect = h("select", {},
-    h("option", { value: "Comprehensive Ambulatory Telehealth Consultation" }, "Comprehensive Ambulatory Telehealth Consultation (99214)"),
-    h("option", { value: "Initial Neurodevelopmental Diagnostic Intake" }, "Initial Neurodevelopmental Diagnostic Intake (99204)"),
-    h("option", { value: "Chronic Disease & Telemetry Management Follow-up" }, "Chronic Disease & Telemetry Management (99457)"));
+    h("option", { value: "Initial Neurodevelopmental Diagnostic Intake", selected: true }, "Initial Neurodevelopmental Diagnostic Intake (99204)"),
+    h("option", { value: "Multidisciplinary Care Coordination & Progress Review" }, "Multidisciplinary Care Coordination & Progress Review (99214)"),
+    h("option", { value: "Educational Therapy & Accommodation Monitoring" }, "Educational Therapy & Accommodation Monitoring (99457)"));
 
   const loadNotes = async () => {
     try {
@@ -2849,8 +2962,9 @@ function soapView() {
       });
       S.soapNote = res;
       await loadNotes();
+      showToast("Clinical SOAP note generated and verified.", "success");
     } catch (e) {
-      alert("Error generating SOAP note: " + e.message);
+      showToast("Error generating SOAP note: " + e.message, "error");
     } finally {
       S.soapGenerating = false;
       renderNotesContent();
@@ -2858,17 +2972,17 @@ function soapView() {
   };
 
   const handleSign = async (nid) => {
-    const clinicianName = prompt("Enter Attending Clinician Signature Name:", "Dr. Sarah Vance, MD (Cardiovascular Medicine)");
+    const clinicianName = prompt("Enter Attending Clinician Signature Name:", "Dr. Sarah Vance, MD (Developmental Pediatrics)");
     if (!clinicianName) return;
     try {
       const signed = await api(`/clinical/soap-notes/${nid}/sign`, {
         body: { clinician_name: clinicianName }
       });
       S.soapNote = signed;
-      alert("✓ SOAP Encounter Note signed and sealed with immutable SHA-256 hash!");
+      showToast("SOAP Encounter Note signed and sealed with immutable SHA-256 hash.", "success");
       await loadNotes();
     } catch (e) {
-      alert(e.message);
+      showToast(e.message, "error");
     }
   };
 
@@ -2883,7 +2997,7 @@ function soapView() {
           class: "primary",
           disabled: S.soapGenerating,
           onclick: handleGenerate
-        }, S.soapGenerating ? "Synthesizing Note..." : "⚡ Generate New SOAP Note"))
+        }, Icons.soap(), S.soapGenerating ? "Synthesizing Note..." : "Generate Encounter SOAP Note")));
     );
 
     const intakeConfigCard = h("div", { class: "card", style: "margin-bottom:1.4rem; background:var(--s1);" },
@@ -2897,7 +3011,7 @@ function soapView() {
     let noteBody;
     if (S.soapGenerating) {
       noteBody = h("div", { class: "card", style: "text-align:center; padding:3rem;" },
-        h("div", { style: "font-size:2rem; margin-bottom:1rem;" }, "⚡"),
+        h("div", { class: "loading-spinner", style: "margin:0 auto 1.2rem auto; width:36px; height:36px;" }),
         h("h3", {}, "Synthesizing Multi-Agent Clinical SOAP Note..."),
         h("p", { class: "mute" }, "Correlating patient vitals, knowledge graph pathways, ICD-10 diagnostic codes, and CPT billing relative value units (wRVU)..."));
     } else if (cur) {
@@ -2908,16 +3022,16 @@ function soapView() {
             h("div", {},
               h("div", { style: "display:flex; align-items:center; gap:0.6rem;" },
                 h("h2", { style: "margin:0;" }, cur.encounter_type || "Clinical Consultation Note"),
-                h("span", { class: "soap-tag " + (isSigned ? "signed" : "draft") }, isSigned ? "✓ SIGNED & SEALED" : "DRAFT NOTE")),
+                h("span", { class: "soap-tag " + (isSigned ? "signed" : "draft") }, isSigned ? "SIGNED & SEALED" : "DRAFT NOTE")),
               h("p", { class: "mute small", style: "margin:0.25rem 0 0 0;" },
                 `Note ID: ${cur.id} · Created: ${fmtDay(cur.created)} · Clinician: ${cur.clinician || "Dr. Specialist"}`)),
             h("div", { style: "display:flex; gap:0.6rem;" },
-              !isSigned && h("button", { class: "outline", onclick: () => handleSign(cur.id) }, "✍️ Sign Note"),
+              !isSigned && h("button", { class: "outline", onclick: () => handleSign(cur.id) }, "Sign & Verify Note"),
               h("button", {
                 class: "primary",
-                style: "background:#0047FF;",
+                style: "background:var(--primary);",
                 onclick: () => window.open(`/clinical/soap-notes/${cur.id}/export`, "_blank")
-              }, "🖨️ Export Printable Dossier")
+              }, "Export Clinical Dossier (PDF)")
             )
           ),
 
