@@ -2479,44 +2479,44 @@ function presentationView() {
   if (currentSlide === 0) {
     slideContent = h("div", { class: "slide-card" },
       h("div", { class: "slide-body" },
-        h("div", { class: "slide-eyebrow" }, "Executive Overview · Clinical Productivity & Quality"),
-        h("h1", { class: "slide-title" }, "CARE AI: Neuro-Symbolic Clinical Intelligence"),
+        h("div", { class: "slide-eyebrow" }, "Pediatric Neurodevelopment · Decision Support"),
+        h("h1", { class: "slide-title" }, "CARE AI: Multi-Agent Neurodevelopmental Planning"),
         h("p", { class: "slide-subtitle" },
-          "Transforming healthcare and special education decision making by synthesizing fragmented diagnostic notes, telemetry, and evidence into personalized, auditable care plans in under 30 seconds."),
+          "Empowering clinicians, educators, and parents to collaboratively build evidence-grounded learning plans for children with ASD, ADHD, dyslexia, and speech disorders."),
 
         h("div", { class: "kpi-grid" },
           h("div", { class: "kpi-card" },
-            h("div", { class: "kpi-val" }, "4-6 hrs → 30s"),
-            h("div", { class: "kpi-label" }, "Documentation Speed"),
-            h("div", { class: "kpi-sub" }, "From tedious manual assembly to instant, comprehensive consensus drafts.")),
+            h("div", { class: "kpi-val" }, "Hours → Minutes"),
+            h("div", { class: "kpi-label" }, "Draft Synthesis"),
+            h("div", { class: "kpi-sub" }, "Rapid initial draft generation from disparate assessments for specialist review.")),
           h("div", { class: "kpi-card" },
-            h("div", { class: "kpi-val" }, "100%"),
-            h("div", { class: "kpi-label" }, "Safety Grounding"),
-            h("div", { class: "kpi-sub" }, "Zero hallucinations on clinical contraindications via deterministic rules.")),
+            h("div", { class: "kpi-val" }, "Rule-Based"),
+            h("div", { class: "kpi-label" }, "Safety Guardrails"),
+            h("div", { class: "kpi-sub" }, "Explicit constraint filters block contraindicated accommodations before clinician review.")),
           h("div", { class: "kpi-card" },
             h("div", { class: "kpi-val" }, "12 Agents"),
-            h("div", { class: "kpi-label" }, "Collaborative Multi-Agent"),
-            h("div", { class: "kpi-sub" }, "Parallel specialist evaluation spanning cardiovascular, cognitive, circadian, and speech.")),
+            h("div", { class: "kpi-label" }, "Domain Specialists"),
+            h("div", { class: "kpi-sub" }, "Parallel evaluation across academic, behavioral, speech, sensory, and cognitive domains.")),
           h("div", { class: "kpi-card" },
             h("div", { class: "kpi-val" }, "SHA-256"),
             h("div", { class: "kpi-label" }, "Cryptographic Integrity"),
-            h("div", { class: "kpi-sub" }, "Immutable hash-chained audit trails and encrypted storage at rest."))),
+            h("div", { class: "kpi-sub" }, "Append-only hash-chained audit trails and encrypted storage at rest."))),
 
         h("div", { style: "display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; margin-top:1.4rem;" },
           h("div", { style: "background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); border-radius:8px; padding:1.2rem;" },
-            h("h3", { style: "color:#DC2626; margin:0 0 0.5rem 0;" }, "❌ The Critical Industry Problem"),
+            h("h3", { style: "color:#DC2626; margin:0 0 0.5rem 0;" }, "❌ The Critical Coordination Problem"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.86rem; color:var(--t2); line-height:1.6;" },
-              h("li", {}, "Clinicians and special educators spend 4-6 hours manually collating notes for each IEP or care plan."),
-              h("li", {}, "Severe cognitive overload leads to missed contraindications and diagnostic blindspots."),
-              h("li", {}, "Siloed telemetry: vitals, sleep, and speech notes are rarely reconciled into a single longitudinal model."),
-              h("li", {}, "Pure LLMs hallucinate medical claims and cannot guarantee clinical safety."))),
+              h("li", {}, "Clinicians, educators, and parents spend hours manually collating notes across disparate assessments for each IEP or care plan."),
+              h("li", {}, "Dense clinical evaluation reports take weeks and leave parents alienated by inaccessible medical jargon."),
+              h("li", {}, "High risk of missed contraindications when accommodations are assembled under administrative time pressure."),
+              h("li", {}, "Generic chatbots hallucinate citations and cannot enforce hard negative clinical constraints."))),
           h("div", { style: "background:rgba(0, 71, 255, 0.05); border:1px solid rgba(0, 71, 255, 0.2); border-radius:8px; padding:1.2rem;" },
             h("h3", { style: "color:#0047FF; margin:0 0 0.5rem 0;" }, "✅ The CARE AI Solution"),
             h("ul", { style: "margin:0; padding-left:1.2rem; font-size:0.86rem; color:var(--t2); line-height:1.6;" },
-              h("li", {}, "Adaptive neuro-symbolic multi-agent architecture that mirrors a multidisciplinary clinical team."),
-              h("li", {}, "Deterministic clinical rules enforce ACC/AHA guidelines and block medical contraindications."),
-              h("li", {}, "Longitudinal telemetry: integrates real-time vitals, multimodal vision gaze, and acoustic speech biomarkers."),
-              h("li", {}, "Generates approved care plans and formal SOAP notes with ICD-10 & CPT billing codes."))
+              h("li", {}, "Multi-agent architecture modeling a multidisciplinary pediatric evaluation team."),
+              h("li", {}, "Collaborative Parent & Clinician Review Flow providing transparent joint plan oversight."),
+              h("li", {}, "Deterministic rule filters enforce educational safety constraints (e.g. blocking timed drills for anxious dyslexics)."),
+              h("li", {}, "Plain-language parent summary translates complex clinical insights into actionable daily home supports."))
           )
         )
       ),
@@ -2543,8 +2543,8 @@ function presentationView() {
           h("tbody", {},
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Clinical Safety & Contraindications"),
-              h("td", { style: "color:#DC2626;" }, "Probabilistic text generation. Can hallucinate unsafe therapies or recommend contraindicated timed drills for anxious patients."),
-              h("td", { style: "color:#059669; font-weight:700;" }, "Deterministic symbolic rule filter (Rule Engine). Hard-blocks contraindicated interventions with 100% mathematical certainty.")),
+              h("td", { style: "color:#DC2626;" }, "Probabilistic text generation. Can hallucinate unsafe therapies or recommend contraindicated timed drills for anxious students."),
+              h("td", { style: "color:#059669; font-weight:700;" }, "Deterministic symbolic rule filter (Rule Engine). Hard-blocks predefined contraindicated accommodations through explicit logical constraints.")),
             h("tr", {},
               h("td", { style: "font-weight:700;" }, "Biomedical Knowledge Grounding"),
               h("td", {}, "Unstructured text memory with latent hallucinations and stale weights."),
@@ -2565,8 +2565,8 @@ function presentationView() {
         ),
 
         h("div", { style: "margin-top:1.4rem; padding:0.9rem 1.2rem; background:rgba(0, 71, 255, 0.05); border-left:4px solid #0047FF; border-radius:4px; font-size:0.86rem; line-height:1.5;" },
-          h("strong", { style: "color:#0047FF;" }, "Mathematical Formula Grounding: "),
-          h("span", {}, "Implements paper Equations 2–4 for Adaptive Hybrid RAG difficulty scoring: d = 10 - 7·max_sim(q, KB). Query difficulty dynamically governs graph traversal depth and literature retrieval depth."))
+          h("strong", { style: "color:#0047FF;" }, "Scientific Grounding & Prototype Status: "),
+          h("span", {}, "Implements paper Equations 2–4 for Adaptive Hybrid RAG difficulty scoring. Risk and prognostic twin models use transparent heuristic priors requiring clinical calibration; benchmark suite uses synthetic cases for pipeline verification."))
       ),
       h("div", { class: "slide-footer-bar" },
         h("span", {}, "CARE AI Corporate Presentation · Slide 2 of 6"),
@@ -2633,20 +2633,20 @@ function presentationView() {
   } else if (currentSlide === 3) {
     slideContent = h("div", { class: "slide-card" },
       h("div", { class: "slide-body" },
-        h("div", { class: "slide-eyebrow" }, "Core Feature Matrix · Production Capabilities"),
-        h("h1", { class: "slide-title" }, "7 Production Clinical Intelligence Pillars"),
+        h("div", { class: "slide-eyebrow" }, "Core Product Architecture · Pediatric Decision Support"),
+        h("h1", { class: "slide-title" }, "Key Pillars of the Neurodevelopmental Platform"),
         h("p", { class: "slide-subtitle" },
-          "An enterprise-ready suite of clinical intelligence tools engineered for healthcare providers, patient portals, and care coordination teams."),
+          "Designed to bridge the gap between multidisciplinary clinical evaluation, school accommodation plans, and family at-home routines."),
 
         h("div", { style: "display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; margin:1.2rem 0;" },
           [
-            ["1. Clinical AI Copilot", "⚡", "Real-time conversational intelligence with semantic literature citations, diagnostic entity tags, and guardrailed suggestions."],
-            ["2. Biometric Vitals Tracker", "📈", "Longitudinal persistence (SQLite vitals), ACC/AHA risk categorization, and responsive SVG trajectory charts."],
-            ["3. Multimodal Intake Lab", "📷", "Computer vision (OpenCV/MediaPipe) for visual-motor ocular strain and acoustic prosody speech biomarker extraction."],
-            ["4. Exportable Care Dossier", "🖨️", "Print/PDF clinical dossiers with multi-agent consensus breakdown, digital twin prognosis, and SHA-256 seal."],
-            ["5. Patient Voice AI Assistant", "🎙️", "Web Speech recognition & synthesis, acute emergency triage (chest pain/syncope alert), and voice vitals logging."],
-            ["6. Clinical SOAP Note Generator", "📝", "Automated generation of formal Subjective, Objective, Assessment, and Plan notes with ICD-10 & CPT billing codes."],
-            ["7. Enterprise Security & Audit", "🛡️", "PBKDF2-SHA256 (310k) password hashing, Fernet encryption at rest, and tamper-evident SHA-256 hash chains."]
+            ["1. Parent & Clinician Review", "🤝", "Flagship collaborative review flow: transparent reasoning pathway, specialist item-by-item sign-off, and plain-language parent summary."],
+            ["2. Multi-Agent Consensus", "⚖️", "Parallel evaluation across academic, behavioral, speech, and sensory specialists with conflict detection and confidence weighting."],
+            ["3. Deterministic Rule Engine", "🛡️", "Explicit negative constraint filters that hard-block contraindicated interventions (e.g., timed testing for anxious dyslexics)."],
+            ["4. Grounded Knowledge Graph", "🧠", "Ontological mapping linking conditions, symptoms, and research-backed interventions with 1,171 indexed literature passages."],
+            ["5. Jargon-Free Parent Portal", "🏡", "Translates complex clinical formulations into actionable daily routines, transition schedules, and home accommodations."],
+            ["6. Cryptographic Audit Ledger", "🔒", "Fernet encryption at rest, RBAC caseload authorization, and append-only SHA-256 hash chains for verifiable data integrity."],
+            ["7. Exploratory Intake Modules", "🔬", "Supplementary research modules: multimodal visual/acoustic screening, somatic observations, and clinical encounter notes."]
           ].map(([title, icon, desc]) => h("div", {
             style: "background:var(--s1); border:1px solid var(--line); border-radius:8px; padding:1rem 1.2rem; transition:all 0.2s;"
           },
@@ -2704,53 +2704,57 @@ function presentationView() {
         h("span", {}, "Press Right Arrow (→) or Next to continue"))
     );
   } else {
+    const priyaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("priya")) || S.plans[1] || S.plans[0];
+    const meenaPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("meena")) || S.plans[3] || S.plans[0];
+    const arjunPlan = S.plans.find(p => (p.student_id || "").toLowerCase().includes("arjun")) || S.plans[2] || S.plans[0];
+
     slideContent = h("div", { class: "slide-card" },
       h("div", { class: "slide-body" },
-        h("div", { class: "slide-eyebrow" }, "Live Product Demonstration · Interactive Scenarios"),
+        h("div", { class: "slide-eyebrow" }, "Live Product Demonstration · Pediatric Scenarios"),
         h("h1", { class: "slide-title" }, "Live Platform Demonstration"),
         h("p", { class: "slide-subtitle" },
-          "Click any scenario below to immediately jump into the live system and experience the multi-agent clinical consensus in real-time."),
+          "Select any pediatric case below to experience the multi-agent consensus, deterministic safety rules, and collaborative parent-clinician review flow."),
 
         h("div", { class: "demo-card-grid" },
           h("div", {
             class: "demo-launch-card",
-            onclick: () => { S.view = "dashboard"; openPlan(S.plans[0]?.plan_id, "dashboard"); }
+            onclick: () => { S.view = "analysis"; openPlan(priyaPlan?.plan_id, "analysis"); }
           },
             h("div", {},
-              h("span", { class: "demo-launch-badge" }, "Adult Patient Case · Cardioprotective"),
-              h("div", { class: "demo-launch-title" }, "John Doe (#PT-8420)"),
-              h("p", { class: "demo-launch-desc" }, "Adult with ADHD and Stage-1 hypertension tendency. Explore longitudinal blood pressure timeline, ACC/AHA classifications, and DASH recommendations.")),
-            h("button", { class: "demo-launch-btn" }, "Open Vitals & Health Dashboard →")),
-
-          h("div", {
-            class: "demo-launch-card",
-            onclick: () => { S.view = "analysis"; openPlan(S.plans[1]?.plan_id || S.plans[0]?.plan_id, "analysis"); }
-          },
-            h("div", {},
-              h("span", { class: "demo-launch-badge" }, "Pediatric Case · Cognitive & Neural"),
+              h("span", { class: "demo-launch-badge" }, "Pediatric Case · Dyslexia & Math"),
               h("div", { class: "demo-launch-title" }, "Priya S (6th Grade)"),
-              h("p", { class: "demo-launch-desc" }, "Diagnosed with dyslexia and math processing challenges. Experience multi-agent academic debate, timed drill blocking, and consensus confidence.")),
-            h("button", { class: "demo-launch-btn" }, "View Multi-Agent Consensus →")),
+              h("p", { class: "demo-launch-desc" }, "Diagnosed with dyslexia and math processing challenges. Experience multi-agent academic debate, rule-based timed drill blocking, and structured literacy accommodations.")),
+            h("button", { class: "demo-launch-btn" }, "Review Priya's Plan →")),
 
           h("div", {
             class: "demo-launch-card",
-            onclick: () => { S.view = "soap"; render(); }
+            onclick: () => { S.view = "analysis"; openPlan(meenaPlan?.plan_id, "analysis"); }
           },
             h("div", {},
-              h("span", { class: "demo-launch-badge" }, "Clinical Encounter · ICD-10 & CPT"),
-              h("div", { class: "demo-launch-title" }, "Automated SOAP Note Generator"),
-              h("p", { class: "demo-launch-desc" }, "Generate accreditation-ready Subjective, Objective, Assessment, and Plan notes with automatic diagnostic ICD-10 and CPT billing codes.")),
-            h("button", { class: "demo-launch-btn" }, "Open SOAP Notes Generator →")),
+              h("span", { class: "demo-launch-badge" }, "Pediatric Case · ASD & Speech"),
+              h("div", { class: "demo-launch-title" }, "Meena R (3rd Grade)"),
+              h("p", { class: "demo-launch-desc" }, "Autism spectrum profile with transition anxiety and acoustic sensitivity. Review visual schedule supports, sensory quiet rooms, and AAC communication accommodations.")),
+            h("button", { class: "demo-launch-btn" }, "Review Meena's Plan →")),
 
           h("div", {
             class: "demo-launch-card",
-            onclick: () => { S.voiceModalOpen = true; render(); }
+            onclick: () => { S.view = "analysis"; openPlan(arjunPlan?.plan_id, "analysis"); }
           },
             h("div", {},
-              h("span", { class: "demo-launch-badge" }, "Voice AI · Natural Dialogue"),
-              h("div", { class: "demo-launch-title" }, "Spoken Voice AI Assistant"),
-              h("p", { class: "demo-launch-desc" }, "Experience natural speech vitals logging (e.g. 'Log my BP 128 over 82'), spoken vitals inquiry, and acute emergency triage.")),
-            h("button", { class: "demo-launch-btn" }, "Launch Voice AI Assistant →"))
+              h("span", { class: "demo-launch-badge" }, "Pediatric Case · ADHD"),
+              h("div", { class: "demo-launch-title" }, "Arjun K (4th Grade)"),
+              h("p", { class: "demo-launch-desc" }, "ADHD combined type with high motor activity. Explore executive function aids, movement breaks, visual timers, and school-home consistency routines.")),
+            h("button", { class: "demo-launch-btn" }, "Review Arjun's Plan →")),
+
+          h("div", {
+            class: "demo-launch-card",
+            onclick: () => { S.view = "recs"; openPlan(priyaPlan?.plan_id, "recs"); }
+          },
+            h("div", {},
+              h("span", { class: "demo-launch-badge" }, "Core Product Flow · Joint Review"),
+              h("div", { class: "demo-launch-title" }, "Parent & Clinician Review Portal"),
+              h("p", { class: "demo-launch-desc" }, "Experience the flagship flow: inspect specialist consensus, make item-by-item decisions, apply cryptographic sign-off, and view plain-language parent summary.")),
+            h("button", { class: "demo-launch-btn" }, "Open Core Review Flow →"))
         ),
 
         h("div", { style: "display:flex; justify-content:center; gap:1rem; margin-top:1.6rem;" },

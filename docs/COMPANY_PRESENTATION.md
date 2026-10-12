@@ -1,15 +1,27 @@
-# CARE AI · Executive Company Presentation & Demo Guide
+# CARE AI · Product Presentation & Demo Guide
 
-> **Confidential · For Internal Company & Stakeholder Presentations**  
-> **Platform Version:** 0.2.0  
+> **Focus:** Personalized Learning & Intervention Plans for Children with ASD, ADHD, Dyslexia, and Speech Disorders  
+> **Target Audience:** Product Reviewers, Multidisciplinary Pediatric Teams & Educational Stakeholders  
+> **Core Flow:** Collaborative Parent & Clinician Review Flow  
 > **System Architecture:** Hybrid Neuro-Symbolic Multi-Agent Framework  
-> **Compliance & Guardrail:** Clinical Decision Support Only · Human-in-the-Loop Specialist Sign-Off Enforced  
+> **Compliance & Guardrail:** Clinical & Educational Decision Support Only · Human-in-the-Loop Specialist Sign-Off Enforced  
+
+---
+
+## Technical Context & Grounded Status
+
+As documented in our repository verification (`README.md` and `docs/VERIFICATION.md`), CARE AI is an assistive decision-support prototype, not an autonomous diagnostic device. In this presentation, we maintain strict technical honesty:
+- **Decision Support Only:** Every generated plan is an encrypted draft requiring human-in-the-loop review and digital approval by a qualified specialist before activation.
+- **Symbolic Constraint Rules:** Safety boundaries (such as blocking high-stakes timed drills for students with anxiety-linked dyslexia) are enforced via explicit, deterministic rule filters rather than relying solely on probabilistic neural output.
+- **Transparent Heuristics:** The digital twin and risk stratification components rely on transparent heuristic priors that are currently uncalibrated; clinical deployment will require validation against longitudinal pediatric cohorts.
+- **Synthetic Benchmark Validation:** Automated evaluation metrics currently reflect synthetic benchmark cases for architectural pipeline testing; clinical efficacy claims await co-design and validation with expert educators and clinicians.
+- **Core Product vs. Exploratory Modules:** The primary product focus is **pediatric neurodevelopmental learning plans**. Peripheral features present in the codebase (somatic telemetry, SOAP encounter billing notes, and speech assistant) are exploratory research extensions, not the primary product narrative.
 
 ---
 
 ## Quick Launch for the Presentation
 
-To start the full live platform before your presentation, simply run:
+To start the full live platform before your presentation, run:
 
 ```bash
 # Windows (Double-click or run from command prompt):
@@ -19,140 +31,148 @@ run_demo.bat
 python run_demo.py
 ```
 
-The system will automatically initialize security keys, verify the database, launch the local server at `http://localhost:8000/`, and open your default web browser.
+The system will verify security keys, prepare the database, start the local server at `http://localhost:8000/`, and open your default browser.
 
-### Instant 1-Click Demo Profiles
+### Presentation Demo Accounts
 
-| Role | Username | Password | Purpose in Presentation |
+| Role | Username | Password | Purpose in the Core Flow |
 |---|---|---|---|
-| **Attending Clinician** | `clinician` | `clinician123` | Full clinical intelligence, multi-agent consensus, SOAP notes, approvals |
-| **Verified Patient** | `patient` | `patient123` | Patient portal, voice assistant, daily lifestyle care plan, personal vitals |
-| **Caregiver / Advocate** | `parent` | `parent123` | Family advocacy view, progress tracking, check-in feedback |
-| **System Administrator** | `admin` | `admin12345` | Cryptographic audit trail verification, user caseload management |
+| **Attending Clinician / Specialist** | `clinician` | `clinician123` | Inspects multi-agent synthesis, reviews contraindication rules, decides on each recommendation, signs off |
+| **Parent / Caregiver** | `parent` | `parent123` | Family advocacy view: inputs at-home observations, reviews jargon-free summary, tracks home accommodations |
+| **Student / Patient** | `patient` | `patient123` | Learner portal with daily accommodations schedule and supportive interface |
+| **System Administrator** | `admin` | `admin12345` | Cryptographic audit trail verification (SHA-256 tamper-evident ledger) |
 
 ---
 
-## 5-Minute Executive Pitch Script
+## 5-Minute Executive Product Pitch Script
 
-*(Use this word-for-word script when presenting to company leadership, executives, or product directors)*
+*(Use this grounded script when presenting to product leaders, design reviewers, and interview panels)*
 
-> *"Good morning everyone. Today I am excited to demonstrate **CARE AI**, our enterprise-grade clinical decision intelligence platform for personalized neurodevelopmental and chronic care planning.*
+> *"Good morning. Today I am excited to share **CARE AI**, a decision-support platform designed to solve a critical breakdown in special education and pediatric care: **personalized intervention planning for neurodiverse children**—specifically those navigating **Autism Spectrum Disorder (ASD), ADHD, dyslexia, and speech and language impairments**.*
 >
-> *Today, clinicians, behavioral therapists, and special educators face an acute administrative crisis: it takes between **4 to 6 hours** to manually collate diagnostic labs, behavioral observations, school IEP metrics, and vitals for a single patient case. This causes severe cognitive fatigue, delays intervention, and risks missed contraindications.*
+> *Today, pediatric clinicians, special educators, and parents face a severe coordination bottleneck. Evaluating a neurodiverse child requires synthesizing fragmented psychological reports, classroom observations, sensory profiles, and at-home behaviors across disparate silos. Parents often receive dense, 30-page evaluation dossiers that take weeks to arrive and are nearly impossible to translate into practical at-home routines. Meanwhile, clinicians experience intense cognitive fatigue trying to ensure recommendations don't conflict with student-specific contraindications.*
 >
-> *Generic generative AI models like ChatGPT cannot solve this alone because healthcare demands deterministic safety: pure LLMs hallucinate dosages, lack clinical grounding, and fail demographic fairness tests.*
+> *Generic generative chatbots cannot solve this safely. Pure LLMs hallucinate citations, lack structured domain ontologies, and struggle with hard negative constraints—such as recommending timed fluency drills to a child with dyslexia whose performance collapses under time pressure.*
 >
-> *CARE AI solves this with a **Hybrid Neuro-Symbolic Multi-Agent Architecture**. We deploy **12 specialized autonomous agents** working in parallel—spanning cardiovascular, cognitive, circadian, and speech domains. A deterministic symbolic rule engine blocks contraindicated therapies with 100% mathematical certainty, while an explicit Biomedical Knowledge Graph and 1,171 indexed literature passages ground every recommendation.*
+> *CARE AI tackles this with a **Hybrid Neuro-Symbolic Multi-Agent Architecture**. We coordinate specialized agents across academic decoding, executive functioning, behavioral regulation, speech-language, and sensory needs. Rather than open-ended text generation, a deterministic symbolic rule engine filters candidate accommodations against explicit contraindications, while a specialized knowledge graph and literature index ground each recommendation.*
 >
-> *The entire care plan, longitudinal vitals telemetry, 12-week digital twin prognosis simulation, and formal SOAP notes with ICD-10 and CPT billing codes are generated in **under 30 seconds**.*
+> *Our core product experience centers on a single, vital interaction: the **Parent and Clinician Collaborative Review Flow**:*
+> *1. **Intake & Multi-Agent Synthesis:** Diagnostic notes, school observations, and parent inputs are structured and synthesized into an initial draft plan in minutes instead of days of manual collation.*
+> *2. **Clinician Governance:** The clinician inspects the agent consensus, reviews the transparent reasoning path, makes item-by-item decisions, and applies a tamper-evident digital sign-off.*
+> *3. **Actionable Parent Portal:** The parent receives an accessible, jargon-free summary highlighting tangible home supports, sensory accommodations, and collaborative school goals.*
 >
-> *Crucially, CARE AI enforces a strict **Human-in-the-Loop** model: every plan is an encrypted draft that requires specialist digital sign-off, sealed with a tamper-evident SHA-256 cryptographic audit root.*
+> *Crucially, we do not claim autonomous medical infallibility: every plan is an encrypted draft with strict Human-in-the-Loop oversight, and our risk heuristics are transparently documented as uncalibrated prototypes awaiting longitudinal clinical trials.*
 >
-> *Let me now walk you through the live working system."*
+> *Let me walk you through the live working system, leading directly with the parent and clinician review flow."*
 
 ---
 
-## 10-Step Live Demonstration Walkthrough
+## Core Demonstration Walkthrough: The Parent-Clinician Review Flow
 
-Follow this sequence during your live presentation to demonstrate maximum impact:
+Follow this sequence during your presentation to keep the spotlight on the core user and primary flow:
 
-### Step 1: Built-in Executive Deck (`📽️ Company Presentation Deck`)
-- **Action:** Click the top-bar button `📽️ Company Presentation Deck` or select it from the sidebar navigation.
-- **Talking Points:** Show the 6 interactive slides built directly into the software. Use the **Left/Right arrow keys** on your keyboard to navigate between slides.
-- **Key Visuals:** Point out the KPI grid (*4-6 hrs → 30s*), the comparison table (*Pure LLMs vs Neuro-Symbolic*), and the 12-agent architecture flow.
-- **Transition:** Click the card for **John Doe (#PT-8420)** on Slide 6 to launch directly into the live workspace.
+```
+[Parent Input & Case Profile] ──> [Multi-Agent Analysis] ──> [Clinician Joint Review & Sign-Off] ──> [Actionable Parent Summary]
+```
 
-### Step 2: Executive Patient Care Dashboard
-- **Action:** View `Dashboard`.
-- **Talking Points:** Explain that this view aggregates patient caseload risk stratification, active consensus status, and recent activity.
-- **Key Visuals:** Show the 4 stat cards (*Registered Patients, Analyzed Cases, Moderate/High Risk Cases, Validated Recommendations*) and the interactive patient activity table.
+### Step 1: The Product Mission (`📽️ Presentation Deck`)
+- **Action:** Open `📽️ Company Presentation Deck` in the top navigation.
+- **Talking Points:** Show Slides 1–3. Emphasize the pediatric neurodevelopmental mission (ASD, ADHD, dyslexia, speech disorders). Point out the comparison table illustrating why deterministic symbolic rules are essential for safety-critical special education planning.
+- **Key Message:** We are building decision support for a multidisciplinary team and family, not an autonomous replacement for clinical judgment.
 
-### Step 3: Longitudinal Biometric Vitals & Telemetry Tracker
-- **Action:** Click `Vitals & Telemetry` in the sidebar navigation.
-- **Talking Points:** CARE AI tracks longitudinal patient vitals with ACC/AHA clinical classification (Normal, Elevated, Stage-1, Stage-2 Hypertension).
-- **Key Visuals:** 
-  - Dynamic dual-line SVG trajectory chart displaying systolic and diastolic pressure trending downward over time.
-  - Interactive **"Log Biometric Vitals"** button: Click it, enter systolic `128`, diastolic `82`, pulse `72`, and show the instant recording.
+### Step 2: The Neurodiverse Student Caseload (`Dashboard`)
+- **Action:** Click `Dashboard` in the sidebar.
+- **Talking Points:** Walk through the active pediatric cases:
+  - **Priya S (Age 11, 6th Grade):** Dyslexia and math processing difficulty; high visual-spatial aptitude; high anxiety during timed oral reading.
+  - **Meena R (Age 8, 3rd Grade):** Autism spectrum profile with speech-language impairment; acoustic sensitivity in loud assemblies; thrives with visual transition schedules and AAC supports.
+  - **Arjun K (Age 9, 4th Grade):** ADHD combined type; high motor activity and task-switching fatigue; responds well to visual timers and chunked assignments.
+- **Transition:** Select **Priya S** to enter the core review flow.
 
-### Step 4: Multi-Agent Clinical Consensus & Radial Confidence Gauge
-- **Action:** Click `Multi-Agent Analysis` in the sidebar.
-- **Talking Points:** This is where the 12 agents synthesize their independent findings into an 84% consensus confidence.
-- **Key Visuals:** 
-  - Click through the domain tabs: *Cardiovascular & Vitals*, *Cognitive & Neural*, *Sleep & Circadian*, *Speech & Expression*, *Visual & Ocular*.
-  - Show the luminous SVG radial consensus gauge.
+### Step 3: Multi-Agent Synthesis & Domain Consensus (`Multi-Agent Analysis`)
+- **Action:** Click `Multi-Agent Analysis`.
+- **Talking Points:** 
+  - Show how parallel specialized agents evaluate Priya's case:
+    - **Academic / Cognitive Agent:** Identifies phonological decoding delay and recommends structured literacy (Orton-Gillingham approach) and enlarged font spacing.
+    - **Behavioral Agent:** Highlights acute performance anxiety triggered by timed tasks.
+    - **Vision & Sensory Agent:** Identifies line-skipping fatigue and recommends text-to-speech tools and assistive rulers.
+  - Point out the radial consensus score and domain breakdown.
 
-### Step 5: Interactive Biomedical Knowledge Graph
+### Step 4: Deterministic Rule Engine & Safety Filtering
+- **Action:** Highlight the contraindication filters in the recommendations view.
+- **Talking Points:** 
+  - Demonstrate rule-based constraint enforcement: because Priya has documented testing anxiety paired with dyslexia, the symbolic rule engine explicitly blocks timed oral reading drills.
+  - Explain why this matters: pure generative models frequently suggest timed drills to boost fluency; our symbolic filter prevents unsafe or counterproductive recommendations before the clinician even sees the draft.
+
+### Step 5: Grounded Reasoning & Literature Provenance (`Knowledge Graph`)
 - **Action:** Click `Knowledge Graph` in the sidebar.
-- **Talking Points:** CARE AI is not a black box. It traverses an explicit ontology of conditions, symptoms, and verified treatment protocols.
-- **Key Visuals:** Click on nodes like `Hypertension`, `High Blood Pressure`, or `DASH Diet` to see modal entity cards. Use the category filter buttons (`Symptom`, `Condition`, `Protocol`, `Risk Factor`) to show dynamic graph clustering.
+- **Talking Points:** 
+  - Demonstrate that the system is not a black box. Show the nodes linking `Dyslexia` → `Phonological Processing` → `Structured Literacy` and `Multisensory Instruction`.
+  - Explain that each link is connected to explicit indexed research passages, giving both clinician and parent verifiable grounding for why an accommodation is suggested.
 
-### Step 6: 12-Week Digital Twin What-If Prognosis Simulation
-- **Action:** Click `Risk & Prognosis` in the sidebar.
-- **Talking Points:** The Digital Twin agent simulates patient trajectories 12 weeks into the future under counterfactual scenarios: *Without Intervention* vs *With CARE AI Protocol*.
-- **Key Visuals:** Show the domain risk bar charts and the comparative prognostic table showing blood pressure normalizing from 142/90 to 124/80 mmHg (+24 pts cardiovascular gain).
+### Step 6: Clinician Decision & Plan Sign-Off (`Care Protocol & Recs`)
+- **Action:** Navigate to `Care Protocol & Recs`.
+- **Talking Points:** This is the core clinician review screen.
+  - The clinician inspects each proposed accommodation:
+    1. *Structured Literacy Intervention (Tier 2/3)*
+    2. *Assistive Text-to-Speech Software for Independent Reading*
+    3. *Extended Time on Assessments (1.5x) with Non-Timed Alternative Measures*
+    4. *High-Contrast, Spaced Typography*
+  - The clinician decides on each item (**Accept / Modify / Reject**).
+  - Show the automated Policy & Bias verification: checks counterfactual demographic invariance before sign-off.
+  - Click **Approve Plan**: Demonstrates the Human-in-the-Loop requirement and shows the generation of the SHA-256 digital signature seal.
 
-### Step 7: Automated Clinical SOAP Encounter Notes with ICD-10 & CPT Billing
-- **Action:** Click `Clinical SOAP Notes` in the sidebar navigation.
-- **Talking Points:** Enterprise healthcare organizations save hundreds of administrative hours with automated clinical documentation.
-- **Key Visuals:**
-  - Show the 4 structured quadrants: **[S] Subjective**, **[O] Objective**, **[A] Assessment**, and **[P] Plan**.
-  - Show the automated **ICD-10-CM codes** (`I10`, `G47.20`, `Z73.3`) and **CPT billing codes** (`99214`, `99453`, `99457` with wRVU values).
-  - Click **"✍️ Sign Note"**: Enter clinician name, showing real-time generation of the SHA-256 digital signature seal.
-  - Click **"🖨️ Export Printable Dossier"**: Opens the official clinical encounter note ready for print or EHR attachment.
+### Step 7: The Parent Experience & Plain-Language Summary (`Parent Portal`)
+- **Action:** Log in as `parent` (or open the Parent Communication view for Priya S).
+- **Talking Points:** 
+  - Contrast this with a traditional 30-page neuropsychological report:
+    - Clear, empathetic language explaining Priya's strengths (visual-spatial reasoning) alongside her learning needs.
+    - Actionable at-home suggestions: pairing audiobooks with text, establishing consistent homework routines, removing timed pressure during home study.
+    - Clear school advocacy points: specific accommodations the family can request during the next school 504/IEP meeting.
+  - Highlight the product outcome: empowers parents as informed advocates rather than leaving them overwhelmed.
 
-### Step 8: Spoken Voice AI Assistant & Acute Emergency Triage
-- **Action:** Click the floating microphone FAB in the bottom right corner, or click `Voice Assistant` in the sidebar.
-- **Talking Points:** Designed for hands-free clinical input and patient accessibility. Includes acoustic prosody analysis and acute emergency keyword screening.
-- **Live Demo Examples:**
-  - Click the chip: *"Log my blood pressure 135 over 85 and pulse 74"* -> Shows instant database recording and spoken confirmation.
-  - Click the chip: *"I am having severe chest pain and short of breath"* -> Demonstrates instant **Critical Emergency Alert**, audible alert, and 911 dispatch notification.
+### Step 8: Cryptographic Audit Trail & Governance (`Settings & Audit`)
+- **Action:** As Admin, navigate to `Settings & Audit` and click `Verify Audit Chain`.
+- **Talking Points:** 
+  - Explain why verifiable integrity matters in education and healthcare: every case creation, agent synthesis, clinician edit, and approval is recorded in an append-only SHA-256 hash-chained ledger.
+  - Confirms tamper-free provenance: `✓ Clinical audit log is intact and tamper-free.`
 
-### Step 9: Clinical AI Copilot with Peer-Reviewed Literature Citations
-- **Action:** Click `Ask CARE AI Copilot` in the bottom right.
-- **Talking Points:** An interactive conversational slide-out drawer grounded in 1,171 indexed literature passages.
-- **Live Demo Examples:** Click *"What are the best foods for the DASH diet?"* or *"Explain my blood pressure readings and risk level"*. Show that every answer includes formal citations and biomedical graph entity tags.
-
-### Step 10: Exportable Official Clinical Dossier & Tamper-Evident Audit Trail
-- **Action:** Click `Care Protocol & Recs`, then click `🖨️ Export Official Patient Dossier`.
-- **Talking Points:** Demonstrates hospital-grade report export with cryptographic provenance, digital twin outcome table, and signature blocks.
-- **Action:** Navigate to `Settings & Audit` (as Admin) and click `Verify Audit Chain`. Show the green confirmation: `✓ Clinical audit log is intact and tamper-free.`
+### Step 9: Contextualizing Peripheral Modules (Brief Tour)
+- **Talking Points:** Address the other tools in the repository transparently:
+  - **Somatic & Vitals Telemetry:** Highlight that in pediatric neurodevelopment, physiological tracking is useful for monitoring sleep disruption or autonomic stress reactions, not adult cardiovascular diagnosis.
+  - **Encounter SOAP Generator:** Provides structured clinical documentation for multidisciplinary pediatric clinics, saving documentation overhead.
+  - **Voice Assistant:** An exploratory natural-dialogue interface exploring accessible intake for caregivers with busy hands or accessibility constraints.
 
 ---
 
-## Anticipated Executive Questions & Technical FAQ
+## Anticipated Reviewer Questions & Honest Technical FAQ
 
-### Q1: "Is CARE AI considered an FDA-regulated medical device?"
-> **Answer:** No. CARE AI is strictly a **Clinical Decision Support (CDS)** platform under Section 520(o)(1)(E) of the 21st Century Cures Act. The software transparently displays its reasoning pathway, cites peer-reviewed literature, and marks every output as a draft that requires independent verification and approval by a licensed medical practitioner.
+### Q1: "Your README notes that the risk model and digital twin priors are uncalibrated. How should reviewers evaluate this?"
+> **Answer:** We deliberately call this out in our documentation because scientific rigor requires honest boundaries. The current risk equations and 12-week prognostic projections are **transparent heuristic baseline models** designed to demonstrate the end-to-end data flow and what-if simulation architecture. They illustrate how domain priors can be updated without black-box retraining. In a production rollout, these priors must be calibrated on real, longitudinal pediatric clinical datasets with specialist oversight.
 
-### Q2: "How does the system eliminate generative hallucinations in medical contexts?"
-> **Answer:** We employ a **Hybrid Neuro-Symbolic Fusion**:
-> 1. Hard deterministic rules in Python inspect every recommendation against clinical contraindications (e.g. blocking timed drills for anxious dyslexics or restricting strenuous isometric exercises for hypertensive patients).
-> 2. The Biomedical Knowledge Graph enforces valid ontology connections.
-> 3. Neural models are constrained to phrase synthesis and semantic similarity ranking, never uncapped diagnostic generation.
+### Q2: "What is the status of the evaluation suite?"
+> **Answer:** The current evaluation harness (`eval/run_eval.py`) runs on 6 synthetic benchmark cases designed to verify pipeline mechanics—such as router dispatch, constraint blocking, and Shapley attribution. We do not claim validated clinical efficacy until the system is benchmarked against real, de-identified expert-authored IEPs and clinical intervention records in a formal IRB-reviewed study.
 
-### Q3: "How does CARE AI ensure patient privacy and HIPAA compliance?"
+### Q3: "Why build a hybrid neuro-symbolic system instead of just prompting GPT-4?"
+> **Answer:** Because pediatric neurodevelopment cannot tolerate probabilistic failures in safety constraints. A pure LLM may correctly suggest accommodations 90% of the time, but the 10% failure mode can include harmful or contraindicated strategies (like high-pressure timed testing for an anxious child with phonological dyslexia). Symbolic rules provide deterministic constraint guarantees, while explicit knowledge graphs provide transparent, verifiable provenance that parents and clinicians can inspect.
+
+### Q4: "Why prioritize the Parent-Clinician Review Flow over other clinical features?"
+> **Answer:** From a product perspective, the biggest friction in pediatric care isn't data entry—it's communication and collaborative trust. When a child is diagnosed with ASD or ADHD, parents often feel alienated by clinical jargon, while clinicians lack time to translate complex clinical findings into practical home strategies. Focusing on the joint review loop creates the highest immediate product value: it gives clinicians efficient decision support while giving parents actionable clarity.
+
+### Q5: "How does the system ensure patient and student data privacy?"
 > **Answer:**
-> - **Zero-Knowledge Scrubbing:** Names, emails, and phone numbers are scrubbed client-side before entering the agent pipeline.
-> - **Encryption at Rest:** All student cases, notes, and plan payloads are encrypted with authenticated Fernet AES-128-CBC + HMAC-SHA256 cryptography in SQLite.
-> - **Access Control:** Role-Based Access Control (RBAC) and caseload authorization ensure clinicians and parents only access assigned patients.
-> - **Audit Trail:** Append-only SHA-256 hash-chained ledger makes database tampering mathematically detectable.
-
-### Q4: "Can this integrate with our hospital or district EHR systems?"
-> **Answer:** Yes. CARE AI exposes standard REST APIs with JWT bearer authentication, structured Pydantic JSON schemas, and standard clinical codifications (ICD-10-CM and CPT billing codes). Dossiers can be exported as printable HTML/PDF or ingested via HL7/FHIR webhooks.
-
-### Q5: "What are the computational requirements to run this?"
-> **Answer:** CARE AI is lightweight and dependency-efficient. It runs locally on standard CPU hardware using optimized TF-IDF and vectorized embeddings in seconds, with zero external cloud dependencies required. For air-gapped enterprise deployments, it seamlessly connects to local Ollama instances (`llama3.1:8b` and `nomic-embed-text`).
+> - **Client-Side De-Identification:** Names, emails, and phone numbers are scrubbed before entering the agent processing pipeline.
+> - **Encryption at Rest:** Cases, notes, and plan payloads are encrypted with authenticated Fernet AES-128-CBC + HMAC-SHA256 cryptography in SQLite.
+> - **Role & Caseload Authorization:** Strict RBAC guarantees that parents only see summary data for their own children, and clinicians only access their assigned caseload.
+> - **Tamper-Evident Ledger:** Append-only SHA-256 hash chains make any database tampering immediately detectable.
 
 ---
 
-## Summary of Completed Capabilities Ready to Present
+## Summary of Core Capabilities
 
-- [x] **Executive Presentation Deck:** 6 interactive presentation slides built right into the interface.
-- [x] **Clinical AI Consultation Copilot:** Conversational assistant with peer-reviewed literature citations.
-- [x] **Biometric Telemetry Tracker:** Longitudinal blood pressure, pulse, and sleep tracking with SVG charts.
-- [x] **Multimodal Intake Lab:** Computer vision gaze stability and acoustic prosody speech analysis.
-- [x] **Exportable Clinical Dossier:** Formal multi-page report with SHA-256 cryptographic audit seal.
-- [x] **Patient Voice AI Assistant:** Spoken dialogue, voice vitals logging, and emergency triage screening.
-- [x] **Automated Clinical SOAP Note Generator:** Formal documentation with ICD-10 & CPT billing codes.
-- [x] **Enterprise Security Engine:** Fernet encryption at rest, PBKDF2 hashing, and tamper-evident hash chains.
-- [x] **One-Click Launchers:** `run_demo.bat` and `run_demo.py` for immediate startup.
+- [x] **Pediatric Neurodevelopmental Focus:** Tailored for ASD, ADHD, dyslexia, and speech-language profiles.
+- [x] **Parent & Clinician Collaborative Review:** Seamless flow from multi-agent synthesis to specialist sign-off and plain-language parent summary.
+- [x] **Deterministic Safety Guardrails:** Symbolic rule engine blocks contraindicated accommodations before plan generation.
+- [x] **Explicit Knowledge Provenance:** Grounded in a neurodevelopmental knowledge graph and indexed literature references.
+- [x] **Cryptographic Auditability:** Append-only SHA-256 ledger providing verifiable integrity for all plan decisions.
+- [x] **Transparent Technical Framing:** Clear documentation of prototype boundaries, uncalibrated heuristics, and synthetic benchmarks.
+- [x] **One-Click Startup:** `run_demo.bat` and `run_demo.py` for immediate local evaluation.
