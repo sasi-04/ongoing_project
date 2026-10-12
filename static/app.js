@@ -2939,57 +2939,7 @@ function soapView() {
     h("option", { value: "Multidisciplinary Care Coordination & Progress Review" }, "Multidisciplinary Care Coordination & Progress Review (99214)"),
     h("option", { value: "Educational Therapy & Accommodation Monitoring" }, "Educational Therapy & Accommodation Monitoring (99457)"));
 
-  const loadNotes = async () => {
-    try {
-      const res = await api(`/clinical/soap-notes?student_id=${encodeURIComponent(sid)}`);
-      S.soapNotes = res.notes || [];
-      if (S.soapNotes.length && !S.soapNote) {
-        S.soapNote = S.soapNotes[0];
-      }
-      renderNotesContent();
-    } catch (e) {
-      box.replaceChildren(h("p", { class: "err" }, e.message));
-    }
-  };
-
-  const handleGenerate = async () => {
-    S.soapGenerating = true;
-    renderNotesContent();
-    try {
-      const res = await api("/clinical/soap-notes/generate", {
-        body: {
-          student_id: sid,
-          plan_id: pid,
-          encounter_type: encounterSelect.value,
-          chief_complaint: chiefComplaintInput.value.trim()
-        }
-      });
-      S.soapNote = res;
-      await loadNotes();
-      showToast("Clinical SOAP note generated and verified.", "success");
-    } catch (e) {
-      showToast("Error generating SOAP note: " + e.message, "error");
-    } finally {
-      S.soapGenerating = false;
-      renderNotesContent();
-    }
-  };
-
-  const handleSign = async (nid) => {
-    const clinicianName = prompt("Enter Attending Clinician Signature Name:", "Dr. Sarah Vance, MD (Developmental Pediatrics)");
-    if (!clinicianName) return;
-    try {
-      const signed = await api(`/clinical/soap-notes/${nid}/sign`, {
-        body: { clinician_name: clinicianName }
-      });
-      S.soapNote = signed;
-      showToast("SOAP Encounter Note signed and sealed with immutable SHA-256 hash.", "success");
-      await loadNotes();
-    } catch (e) {
-      showToast(e.message, "error");
-    }
-  };
-
+  // renderNotesContent must be defined FIRST (before loadNotes/handleGenerate/handleSign call it)
   const renderNotesContent = () => {
     const cur = S.soapNote;
 
@@ -3107,8 +3057,61 @@ function soapView() {
   );
 };
 
-loadNotes();
-return box;
+  const loadNotes = async () => {
+    try {
+      const res = await api(`/clinical/soap-notes?student_id=${encodeURIComponent(sid)}`);
+      S.soapNotes = res.notes || [];
+      if (S.soapNotes.length && !S.soapNote) {
+        S.soapNote = S.soapNotes[0];
+      }
+      renderNotesContent();
+    } catch (e) {
+      box.replaceChildren(h("p", { class: "err" }, e.message));
+    }
+  };
+
+  const handleGenerate = async () => {
+    S.soapGenerating = true;
+    renderNotesContent();
+    try {
+      const res = await api("/clinical/soap-notes/generate", {
+        body: {
+          student_id: sid,
+          plan_id: pid,
+          encounter_type: encounterSelect.value,
+          chief_complaint: chiefComplaintInput.value.trim()
+        }
+      });
+      S.soapNote = res;
+      await loadNotes();
+      showToast("Clinical SOAP note generated and verified.", "success");
+    } catch (e) {
+      showToast("Error generating SOAP note: " + e.message, "error");
+    } finally {
+      S.soapGenerating = false;
+      renderNotesContent();
+    }
+  };
+
+  const handleSign = async (nid) => {
+    const clinicianName = prompt("Enter Attending Clinician Signature Name:", "Dr. Sarah Vance, MD (Developmental Pediatrics)");
+    if (!clinicianName) return;
+    try {
+      const signed = await api(`/clinical/soap-notes/${nid}/sign`, {
+        body: { clinician_name: clinicianName }
+      });
+      S.soapNote = signed;
+      showToast("SOAP Encounter Note signed and sealed with immutable SHA-256 hash.", "success");
+      await loadNotes();
+    } catch (e) {
+      showToast(e.message, "error");
+    }
+  };
+
+  // Initial render then load data async
+  renderNotesContent();
+  loadNotes();
+  return box;
 }
 
 // Main Bootstrapping & Routing
